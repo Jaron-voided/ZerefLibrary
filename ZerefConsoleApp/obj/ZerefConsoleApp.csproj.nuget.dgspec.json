@@ -1,0 +1,130 @@
+{
+  "format": 1,
+  "restore": {
+    "/home/zeref-dragneel/Desktop/ZerefLib/ZerefConsoleApp/ZerefConsoleApp.csproj": {}
+  },
+  "projects": {
+    "/home/zeref-dragneel/Desktop/ZerefLib/ZerefConsoleApp/ZerefConsoleApp.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "/home/zeref-dragneel/Desktop/ZerefLib/ZerefConsoleApp/ZerefConsoleApp.csproj",
+        "projectName": "ZerefConsoleApp",
+        "projectPath": "/home/zeref-dragneel/Desktop/ZerefLib/ZerefConsoleApp/ZerefConsoleApp.csproj",
+        "packagesPath": "/home/zeref-dragneel/.nuget/packages/",
+        "outputPath": "/home/zeref-dragneel/Desktop/ZerefLib/ZerefConsoleApp/obj/",
+        "projectStyle": "PackageReference",
+        "configFilePaths": [
+          "/home/zeref-dragneel/.nuget/NuGet/NuGet.Config"
+        ],
+        "originalTargetFrameworks": [
+          "net9.0"
+        ],
+        "sources": {
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "net9.0": {
+            "targetAlias": "net9.0",
+            "projectReferences": {
+              "/home/zeref-dragneel/Desktop/ZerefLib/ZerefLibrary/ZerefLibrary.csproj": {
+                "projectPath": "/home/zeref-dragneel/Desktop/ZerefLib/ZerefLibrary/ZerefLibrary.csproj"
+              }
+            }
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        },
+        "restoreAuditProperties": {
+          "enableAudit": "true",
+          "auditLevel": "low",
+          "auditMode": "direct"
+        },
+        "SdkAnalysisLevel": "9.0.200"
+      },
+      "frameworks": {
+        "net9.0": {
+          "targetAlias": "net9.0",
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48",
+            "net481"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "frameworkReferences": {
+            "Microsoft.NETCore.App": {
+              "privateAssets": "all"
+            }
+          },
+          "runtimeIdentifierGraphPath": "/home/zeref-dragneel/.dotnet/sdk/9.0.200/PortableRuntimeIdentifierGraph.json"
+        }
+      }
+    },
+    "/home/zeref-dragneel/Desktop/ZerefLib/ZerefLibrary/ZerefLibrary.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "/home/zeref-dragneel/Desktop/ZerefLib/ZerefLibrary/ZerefLibrary.csproj",
+        "projectName": "ZerefLibrary",
+        "projectPath": "/home/zeref-dragneel/Desktop/ZerefLib/ZerefLibrary/ZerefLibrary.csproj",
+        "packagesPath": "/home/zeref-dragneel/.nuget/packages/",
+        "outputPath": "/home/zeref-dragneel/Desktop/ZerefLib/ZerefLibrary/obj/",
+        "projectStyle": "PackageReference",
+        "configFilePaths": [
+          "/home/zeref-dragneel/.nuget/NuGet/NuGet.Config"
+        ],
+        "originalTargetFrameworks": [
+          "net9.0"
+        ],
+        "sources": {
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "net9.0": {
+            "targetAlias": "net9.0",
+            "projectReferences": {}
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        },
+        "restoreAuditProperties": {
+          "enableAudit": "true",
+          "auditLevel": "low",
+          "auditMode": "direct"
+        },
+        "SdkAnalysisLevel": "9.0.200"
+      },
+      "frameworks": {
+        "net9.0": {
+          "targetAlias": "net9.0",
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48",
+            "net481"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "frameworkReferences": {
+            "Microsoft.NETCore.App": {
+              "privateAssets": "all"
+            }
+          },
+          "runtimeIdentifierGraphPath": "/home/zeref-dragneel/.dotnet/sdk/9.0.200/PortableRuntimeIdentifierGraph.json"
+        }
+      }
+    }
+  }
+}

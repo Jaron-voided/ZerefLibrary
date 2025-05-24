@@ -1,0 +1,11 @@
+/home/zeref-dragneel/Desktop/ZerefLib/ZerefLibrary/bin/Debug/net9.0/ZerefLibrary.deps.json
+/home/zeref-dragneel/Desktop/ZerefLib/ZerefLibrary/bin/Debug/net9.0/ZerefLibrary.dll
+/home/zeref-dragneel/Desktop/ZerefLib/ZerefLibrary/bin/Debug/net9.0/ZerefLibrary.pdb
+/home/zeref-dragneel/Desktop/ZerefLib/ZerefLibrary/obj/Debug/net9.0/ZerefLibrary.GeneratedMSBuildEditorConfig.editorconfig
+/home/zeref-dragneel/Desktop/ZerefLib/ZerefLibrary/obj/Debug/net9.0/ZerefLibrary.AssemblyInfoInputs.cache
+/home/zeref-dragneel/Desktop/ZerefLib/ZerefLibrary/obj/Debug/net9.0/ZerefLibrary.AssemblyInfo.cs
+/home/zeref-dragneel/Desktop/ZerefLib/ZerefLibrary/obj/Debug/net9.0/ZerefLibrary.csproj.CoreCompileInputs.cache
+/home/zeref-dragneel/Desktop/ZerefLib/ZerefLibrary/obj/Debug/net9.0/ZerefLibrary.dll
+/home/zeref-dragneel/Desktop/ZerefLib/ZerefLibrary/obj/Debug/net9.0/refint/ZerefLibrary.dll
+/home/zeref-dragneel/Desktop/ZerefLib/ZerefLibrary/obj/Debug/net9.0/ZerefLibrary.pdb
+/home/zeref-dragneel/Desktop/ZerefLib/ZerefLibrary/obj/Debug/net9.0/ref/ZerefLibrary.dll
