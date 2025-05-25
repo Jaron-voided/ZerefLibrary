@@ -9,3 +9,4 @@
 /home/zeref-dragneel/Desktop/ZerefLib/ZerefLibrary/obj/Debug/net9.0/refint/ZerefLibrary.dll
 /home/zeref-dragneel/Desktop/ZerefLib/ZerefLibrary/obj/Debug/net9.0/ZerefLibrary.pdb
 /home/zeref-dragneel/Desktop/ZerefLib/ZerefLibrary/obj/Debug/net9.0/ref/ZerefLibrary.dll
+/home/zeref-dragneel/Desktop/ZerefLib/ZerefLibrary/obj/Debug/net9.0/ZerefLibrary.sourcelink.json

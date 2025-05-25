@@ -5,10 +5,8 @@ namespace ZerefLibrary.ZCollections;
 
 public class ZList<T> : IZList<T>
 {
-    private T[] _items;
-    private int _count;
-    public int Count => _count;
-    // Why did these 2 get auto made?
+    internal T[] _items;
+    public int Count { get; private set; }
     public IEnumerator<T> GetEnumerator()
     {
         foreach (T item in _items)
@@ -16,78 +14,101 @@ public class ZList<T> : IZList<T>
             yield return item;
         }
     }
+    
     IEnumerator IEnumerable.GetEnumerator()
     {
         return GetEnumerator();
     }
+    
     public T this[int index]
     {
-        get => _items[index];
-        set => _items[index] = value;
+        get => GetThis(index);
+        set => SetThat(index, value);
     }
+
+    private T GetThis(int index)
+    {
+        if (index < 0 || index >= Count)
+            throw new IndexOutOfRangeException();
+        return _items[index];
+    }
+
+    private void SetThat(int index, T value)
+    {
+        if (index < 0 || index >= Count)
+            throw new IndexOutOfRangeException();
+        _items[index] = value;
+    }
+    
     public ZList()
     {
         _items = new T[8];
-        _count = 0;
+        Count = 0;
     }
+    
     public void Add(T item)
     {
-        if (_count < _items.Length)
+        if (Count < _items.Length)
         {
-            _items[_count] = item;
-            _count++;
+            _items[Count] = item;
+            Count++;
         }
         else
         {
-            _count++;
-            // Should I stop doubling it after it gets to a certain point?
-            T[] newArray = new T[_count * 2];
-            Array.Copy(_items, newArray, _count);
-            newArray[_count] = item;
+            // Maybe handle this differently instead of doubling??
+            T[] newArray = new T[Count * 2];
+            Array.Copy(_items, newArray, Count);
+            newArray[Count] = item;
             _items = newArray;
+            Count++;
         }
     }
+    
     public void Insert(int index, T item)
     {
         // I need to shift everything right?
-        if (index < _count)
+        if (index < Count)
         {
             // Shifts everything to the right one
-            for (int i = index; i < _count; i++)
+            for (int i = Count; i > index; i--)
             {
-                _items[i + 1] = _items[i];
+                _items[i] = _items[i - 1];
             }
+            
             _items[index] = item;
         }
         else
         {
-            T[] newArray = new T[_count * 2];
-            Array.Copy(_items, newArray, _count);
+            T[] newArray = new T[Count * 2];
+            Array.Copy(_items, newArray, Count);
             newArray[index] = item;
             _items = newArray;
         }
 
-        _count++;
+        Count++;
     }
+    
     public void Remove(T item)
     {
         int index = Array.IndexOf(_items, item);
+        if (index < 0 || index >= Count)
+            throw new IndexOutOfRangeException();
         Remove(index);
     }
+    
     public void Remove(int index)
     {
-        for (int i = index; i < _count - 1; i++)
+        for (int i = index; i < Count - 1; i++)
         {
             _items[i] = _items[i + 1];
         }
-        _count--;
+        
+        Count--;
     }
+    
     public void Clear()
     {
-        // use ArrayClear
-        for (int i = 0; i < _count - 1; i++)
-        {
-            _items[i] = default;
-        }
+        Array.Clear(_items, 0, Count);
+        Count = 0;
     }
 }

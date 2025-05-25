@@ -99,3 +99,4 @@
 /home/zeref-dragneel/Desktop/ZerefLib/ZerefTests/obj/Debug/net9.0/ZerefTests.pdb
 /home/zeref-dragneel/Desktop/ZerefLib/ZerefTests/obj/Debug/net9.0/ZerefTests.genruntimeconfig.cache
 /home/zeref-dragneel/Desktop/ZerefLib/ZerefTests/obj/Debug/net9.0/ref/ZerefTests.dll
+/home/zeref-dragneel/Desktop/ZerefLib/ZerefTests/obj/Debug/net9.0/ZerefTests.sourcelink.json

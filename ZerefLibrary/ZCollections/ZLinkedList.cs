@@ -3,58 +3,85 @@ using ZerefLibrary.ZCollections.ZInterfaces;
 
 namespace ZerefLibrary.ZCollections;
 
-public class ZLinkedList<T> : IZList<T>
+internal class ZLinkedList<T> : IZList<T>
 {
-    public ZLinkedListNode<T> Head { get; set; }
-    public ZLinkedListNode<T> Tail { get; set; }
-
-    private int _count;
-    public int Count => _count;
+    private ZLinkedListNode<T> Head { get; set; } = new ZLinkedListNode<T>();
+    private ZLinkedListNode<T> Tail { get; set; } = new ZLinkedListNode<T>();
+    public int Count { get; private set; }
     
     public IEnumerator<T> GetEnumerator()
     {
         ZLinkedListNode<T> current = Head;
-        for (int i = 0; i < Count; i++)
+
+        int i = 0;
+        while (i < Count)
         {
             yield return current._value;
             current = current._next;
+            i++;
         }
     }
+    
     IEnumerator IEnumerable.GetEnumerator()
     {
         return GetEnumerator();
     }
+    
     public T this[int index]
     {
-        get
-        {
-            ZLinkedListNode<T> current = Head;
-            for (int i = 0; i < index; i++)
-            {
-                current = current._next;
-            }
-            return current._value;
-        }
-        set
-        {
-            ZLinkedListNode<T> current = Head;
-            for (int i = 0; i < index; i++)
-            {
-                current = current._next;
-            }
-            current._value = value;
-        }
+        get => GetThis(index);
+        set => SetThat(index, value);
     }
+
+    private T GetThis(int index)
+    {
+        ZLinkedListNode<T> current = Head;
+        int count = 0;
+        while (count < index)
+        {
+            current = current._next;
+            count++;
+        }
+        return current._value;
+    }
+
+    private void SetThat(int index, T value)
+    {
+        ZLinkedListNode<T> current = Head;
+        int count = 0;
+        while (count < index)
+        {
+            current = current._next;
+            count++;
+        }
+        current._value = value;
+    }
+    
     public void Add(T item)
     {
         ZLinkedListNode<T> node = new ZLinkedListNode<T>(Tail, item, new ZLinkedListNode<T>());
         Tail._next = node;
+        Tail = node;
+        if (Count == 0) Head = node;
+        Count++;
     }
 
     public void Insert(int index, T item)
     {
         ZLinkedListNode<T> node = new ZLinkedListNode<T>(Tail, item, new ZLinkedListNode<T>());
         ZLinkedListNode<T> current = Head;
+        
+        // If there are no items, this is Tail and Head
+        if (index == 0)
+        {
+            Head = node;
+        }
+
+        if (index == Count)
+        {
+            Tail = node;
+        }
+        
         for (int i = 0; i < index; i++)
         {
             current =  current._next;
@@ -69,13 +96,18 @@ public class ZLinkedList<T> : IZList<T>
         ZLinkedListNode<T> current = Head;
         for (int i = 0; i < Count; i++)
         {
-            if (current._value.Equals(item))
+            if (current._value != null && current._value.Equals(item))
             {
                 current._previous._next = current._next;
                 current._next._previous = current._previous;
+                
+                // Not sure why this is throwing a warning
                 current = null;
+                break;
             }
         }
+
+        Count--;
     }
 
     public void Remove(int index)
@@ -88,7 +120,7 @@ public class ZLinkedList<T> : IZList<T>
         current._previous._next = current._next;
         current._next._previous = current._previous;
         current = null;
-
+        Count--;
     }
 
     public void Clear()
@@ -100,20 +132,24 @@ public class ZLinkedList<T> : IZList<T>
         {
             temp = temp._next;
             current = null;
+            current._previous = null;
+            current._next = null;
         }
+
+        Count = 0;
     }
 
-    public class ZLinkedListNode<T>()
+    internal class ZLinkedListNode<T>()
     {
         internal ZLinkedListNode<T> _previous;
-        internal T _value;
         internal ZLinkedListNode<T> _next;
-
-        public ZLinkedListNode(ZLinkedListNode<T> previous, T value,  ZLinkedListNode<T> next) : this()
+        internal T _value;
+        
+        internal ZLinkedListNode(ZLinkedListNode<T> previous, T value, ZLinkedListNode<T> next) : this()
         {
             _previous = previous;
-            _value = value;
             _next = next;
+            _value = value;
         }
     }
 }
