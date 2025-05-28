@@ -11,13 +11,17 @@ internal class ZLinkedList<T> : IZList<T>
     
     public IEnumerator<T> GetEnumerator()
     {
+        if (Head == null)
+            throw new InvalidOperationException("Head is null.");
+        
         ZLinkedListNode<T> current = Head;
 
         int i = 0;
+        
         while (i < Count)
         {
-            yield return current._value;
-            current = current._next;
+            yield return current.Value;
+            current = current.Next;
             i++;
         }
     }
@@ -35,32 +39,48 @@ internal class ZLinkedList<T> : IZList<T>
 
     private T GetThis(int index)
     {
+        
+        if (Head == null)
+            throw new InvalidOperationException("Head is null.");
+        
+        if (index < 0)
+            throw new ArgumentOutOfRangeException(nameof(index));
+        
         ZLinkedListNode<T> current = Head;
-        int count = 0;
-        while (count < index)
+        int i = 0;
+        while (i < index)
         {
-            current = current._next;
-            count++;
+            current = current.Next;
+            i++;
         }
-        return current._value;
+        return current.Value;
     }
 
     private void SetThat(int index, T value)
     {
+        if (Head == null)
+            throw new InvalidOperationException("Head is null.");
+        
+        if (index < 0)
+            throw new ArgumentOutOfRangeException(nameof(index));
+
         ZLinkedListNode<T> current = Head;
         int count = 0;
         while (count < index)
         {
-            current = current._next;
+            current = current.Next;
             count++;
         }
-        current._value = value;
+        current.Value = value;
     }
     
     public void Add(T item)
     {
+        if (item == null)
+            throw new ArgumentNullException(nameof(item));
+
         ZLinkedListNode<T> node = new ZLinkedListNode<T>(Tail, item, new ZLinkedListNode<T>());
-        Tail._next = node;
+        Tail.Next = node;
         Tail = node;
         if (Count == 0) Head = node;
         Count++;
@@ -68,6 +88,15 @@ internal class ZLinkedList<T> : IZList<T>
 
     public void Insert(int index, T item)
     {
+        if (Head == null)
+            throw new InvalidOperationException("Head is null.");
+        
+        if (index < 0)
+            throw new ArgumentOutOfRangeException(nameof(index));        
+        
+        if (Count <= 0)
+            throw new ArgumentOutOfRangeException(nameof(Count));
+
         ZLinkedListNode<T> node = new ZLinkedListNode<T>(Tail, item, new ZLinkedListNode<T>());
         ZLinkedListNode<T> current = Head;
         
@@ -84,22 +113,28 @@ internal class ZLinkedList<T> : IZList<T>
         
         for (int i = 0; i < index; i++)
         {
-            current =  current._next;
+            current =  current.Next;
         }
 
-        current._next._next._previous = node;
-        current._next = node;
+        current.Next.Next.Previous = node;
+        current.Next = node;
     }
 
     public void Remove(T item)
     {
+        if (Head == null)
+            throw new InvalidOperationException("Head is null.");
+     
+        if (item == null)
+            throw new ArgumentNullException(nameof(item));
+        
         ZLinkedListNode<T> current = Head;
         for (int i = 0; i < Count; i++)
         {
-            if (current._value != null && current._value.Equals(item))
+            if (current.Value != null && current.Value.Equals(item))
             {
-                current._previous._next = current._next;
-                current._next._previous = current._previous;
+                current.Previous.Next = current.Next;
+                current.Next.Previous = current.Previous;
                 
                 // Not sure why this is throwing a warning
                 current = null;
@@ -110,46 +145,51 @@ internal class ZLinkedList<T> : IZList<T>
         Count--;
     }
 
-    public void Remove(int index)
+    public void RemoveAt(int index)
     {
+        if (Head == null)
+            throw new InvalidOperationException("Head is null.");
+        
+        if (index < 0)
+            throw new ArgumentOutOfRangeException(nameof(index));        
+        
         ZLinkedListNode<T> current = Head;
         for (int i = 0; i < Count; i++)
         {
-            current = current._next;
+            current = current.Next;
         }
-        current._previous._next = current._next;
-        current._next._previous = current._previous;
+        current.Previous.Next = current.Next;
+        current.Next.Previous = current.Previous;
         current = null;
         Count--;
     }
 
     public void Clear()
     {
-        ZLinkedListNode<T> current = Head._next;
-        ZLinkedListNode<T> temp = current._next;
-        Head = null;
-        for (int i = 0; i < Count; i++)
+        ZLinkedListNode<T> node = Head;
+        while (node != null)
         {
-            temp = temp._next;
-            current = null;
-            current._previous = null;
-            current._next = null;
+            var next = node.Next;
+            node.Previous = null;
+            node.Next = null;
+            node = next;
         }
-
+        Head = null;
+        Tail = null;
         Count = 0;
     }
 
     internal class ZLinkedListNode<T>()
     {
-        internal ZLinkedListNode<T> _previous;
-        internal ZLinkedListNode<T> _next;
-        internal T _value;
+        internal ZLinkedListNode<T> Previous;
+        internal ZLinkedListNode<T> Next;
+        internal T Value;
         
         internal ZLinkedListNode(ZLinkedListNode<T> previous, T value, ZLinkedListNode<T> next) : this()
         {
-            _previous = previous;
-            _next = next;
-            _value = value;
+            Previous = previous;
+            Next = next;
+            Value = value;
         }
     }
 }

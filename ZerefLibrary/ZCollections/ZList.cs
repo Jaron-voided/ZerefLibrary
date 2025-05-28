@@ -5,11 +5,11 @@ namespace ZerefLibrary.ZCollections;
 
 public class ZList<T> : IZList<T>
 {
-    internal T[] _items;
+    internal T[] Items;
     public int Count { get; private set; }
     public IEnumerator<T> GetEnumerator()
     {
-        foreach (T item in _items)
+        foreach (T item in Items)
         {
             yield return item;
         }
@@ -30,59 +30,66 @@ public class ZList<T> : IZList<T>
     {
         if (index < 0 || index >= Count)
             throw new IndexOutOfRangeException();
-        return _items[index];
+        return Items[index];
     }
 
     private void SetThat(int index, T value)
     {
         if (index < 0 || index >= Count)
             throw new IndexOutOfRangeException();
-        _items[index] = value;
+        Items[index] = value;
     }
     
     public ZList()
     {
-        _items = new T[8];
+        Items = new T[8];
         Count = 0;
     }
     
     public void Add(T item)
     {
-        if (Count < _items.Length)
+        if (item == null)
+            throw new ArgumentNullException(nameof(item));
+        
+        if (Count < Items.Length)
         {
-            _items[Count] = item;
-            Count++;
+            Items[Count] = item;
         }
         else
         {
             // Maybe handle this differently instead of doubling??
             T[] newArray = new T[Count * 2];
-            Array.Copy(_items, newArray, Count);
+            Array.Copy(Items, newArray, Count);
             newArray[Count] = item;
-            _items = newArray;
-            Count++;
+            Items = newArray;
         }
+
+        Count++;
     }
     
     public void Insert(int index, T item)
     {
+        if (index < 0)
+            throw new ArgumentOutOfRangeException(nameof(index));        
+
         // I need to shift everything right?
         if (index < Count)
         {
             // Shifts everything to the right one
             for (int i = Count; i > index; i--)
             {
-                _items[i] = _items[i - 1];
+                Items[i] = Items[i - 1];
             }
             
-            _items[index] = item;
+            Items[index] = item;
         }
         else
         {
+            // Should it be allowed to put an item extra spots past the last item
             T[] newArray = new T[Count * 2];
-            Array.Copy(_items, newArray, Count);
+            Array.Copy(Items, newArray, Count);
             newArray[index] = item;
-            _items = newArray;
+            Items = newArray;
         }
 
         Count++;
@@ -90,17 +97,21 @@ public class ZList<T> : IZList<T>
     
     public void Remove(T item)
     {
-        int index = Array.IndexOf(_items, item);
+        int index = Array.IndexOf(Items, item);
         if (index < 0 || index >= Count)
             throw new IndexOutOfRangeException();
-        Remove(index);
+        
+        RemoveAt(index);
     }
     
-    public void Remove(int index)
+    public void RemoveAt(int index)
     {
+        if (index < 0)
+            throw new ArgumentOutOfRangeException(nameof(index));        
+
         for (int i = index; i < Count - 1; i++)
         {
-            _items[i] = _items[i + 1];
+            Items[i] = Items[i + 1];
         }
         
         Count--;
@@ -108,7 +119,7 @@ public class ZList<T> : IZList<T>
     
     public void Clear()
     {
-        Array.Clear(_items, 0, Count);
+        Array.Clear(Items, 0, Count);
         Count = 0;
     }
 }

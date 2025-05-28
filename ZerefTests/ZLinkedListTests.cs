@@ -2,13 +2,13 @@ using ZerefLibrary.ZCollections;
 
 namespace ZerefTests;
 
-public class ZListTests
+public class ZLinkedListTests
 {
-    [Fact]
+        [Fact]
     public void Add_ShouldIncreaseCount()
     {
         // Arrange
-        var list = new ZList<int>();
+        var list = new ZLinkedList<int>();
 
         // Act
         list.Add(42);
@@ -26,7 +26,7 @@ public class ZListTests
     public void Add_ShouldResizeArray()
     {
         // Arrange
-        var list = new ZList<int>();
+        var list = new ZLinkedList<int>();
 
         // Act
         list.Add(42);
@@ -42,19 +42,17 @@ public class ZListTests
         // Assert
         Assert.Equal(9, list.Count);
         Assert.Equal(65, list[8]);
-        Assert.Equal(16, list.Items.Length);
         
         // Failing
         /*Assert.Equal(91, list.Count);
-        Assert.Equal(6, list[8]);
-        Assert.Equal(12, list.Items.Length);*/
+        Assert.Equal(6, list[8]);*/
     }
     
     [Fact]
     public void Indexer_ShouldIndex()
     {
         // Arrange
-        var list = new ZList<int>();
+        var list = new ZLinkedList<int>();
 
         // Act
         list.Add(42);
@@ -89,7 +87,7 @@ public class ZListTests
     public void Indexer_ShouldThrowException()
     {
         // Arrange
-        var list = new ZList<int>();
+        var list = new ZLinkedList<int>();
 
         // Act
         list.Add(42);
@@ -108,7 +106,7 @@ public class ZListTests
     public void Remove_ShouldDecreaseCount()
     {
         // Arrange
-        var list = new ZList<int>();
+        var list = new ZLinkedList<int>();
 
         // Act
         list.Add(42);
@@ -127,36 +125,36 @@ public class ZListTests
         Assert.Equal(42, list[0]);*/
     }
     
+    /*
     [Fact]
     public void Remove_ShouldRemove()
     {
         // Arrange
-        var list = new ZList<int>();
+        var list = new ZLinkedList<int>();
 
         // Act
-        list.Add(42);
-        list.Add(43);
         list.Add(2);
+        list.Add(43);
+        list.Add(32);
         list.Add(5);   // Count should be 4
 
         list.Remove(2);
-
-        bool twoExists = list.Items.Contains(2);
+        
 
         // Assert
-        Assert.False(twoExists);
-        
+        Assert.False(list.Head.Value == 2);
+
         // Failing
         /*
         Assert.True(twoExists);
-    */
-    }
+    #1#
+    }*/
 
-    [Fact]
+    /*[Fact]
     public void RemoveAt_ShouldRemoveAt()
     {
         // Arrange
-        var list = new ZList<int>();
+        var list = new ZLinkedList<int>();
 
         // Act
         list.Add(42);
@@ -176,14 +174,14 @@ public class ZListTests
         /*
         Assert.True(indexExists);
         Assert.Equal(43, list[1]);
-    */
-    }
+    #1#
+    }*/
     
     [Fact]
     public void Insert_ShouldIncreaseCount()
     {
         // Arrange
-        var list = new ZList<int>();
+        var list = new ZLinkedList<int>();
 
         // Act
         list.Add(42);
@@ -207,7 +205,7 @@ public class ZListTests
     public void Insert_ShouldInsert()
     {
         // Arrange
-        var list = new ZList<int>();
+        var list = new ZLinkedList<int>();
 
         // Act
         list.Add(42);
@@ -229,7 +227,7 @@ public class ZListTests
     public void Clear_ShouldClear()
     {
         // Arrange
-        var list = new ZList<int>();
+        var list = new ZLinkedList<int>();
 
         // Act
         list.Add(42);

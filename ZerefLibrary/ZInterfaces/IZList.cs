@@ -8,6 +8,6 @@ public interface IZList<T> : IEnumerable<T>
     void Add(T item);
     void Insert(int index, T item);
     void Remove(T item);
-    void Remove(int index);
+    void RemoveAt(int index);
     void Clear();
 }
