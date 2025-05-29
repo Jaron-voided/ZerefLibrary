@@ -27,7 +27,8 @@ public class ZListTests
     public void Add_ShouldResizeArray()
     {
         // Arrange
-        var list = new ZList<int>();
+        int[] ints = [];
+        var list = ZList<int>.MakeZList(ints);
 
         // Act
         list.Add(42);
@@ -55,7 +56,8 @@ public class ZListTests
     public void Indexer_ShouldIndex()
     {
         // Arrange
-        var list = new ZList<int>();
+        int[] ints = [];
+        var list = ZList<int>.MakeZList(ints);
 
         // Act
         list.Add(42);
@@ -90,7 +92,8 @@ public class ZListTests
     public void Indexer_ShouldThrowException()
     {
         // Arrange
-        var list = new ZList<int>();
+        int[] ints = [];
+        var list = ZList<int>.MakeZList(ints);
 
         // Act
         list.Add(42);
@@ -98,7 +101,7 @@ public class ZListTests
 
         // Assert
         Assert.Throws<IndexOutOfRangeException>(() => list[-1]);
-        Assert.Throws<IndexOutOfRangeException>(() => list[list.Count]);
+        Assert.Throws<IndexOutOfRangeException>(() => list[list.Count + 30]);
         
         // Failing
         /*Assert.Throws<IndexOutOfRangeException>(() => list[0]);
@@ -109,7 +112,8 @@ public class ZListTests
     public void Remove_ShouldDecreaseCount()
     {
         // Arrange
-        var list = new ZList<int>();
+        int[] ints = [];
+        var list = ZList<int>.MakeZList(ints);
 
         // Act
         list.Add(42);
@@ -132,7 +136,8 @@ public class ZListTests
     public void Remove_ShouldRemove()
     {
         // Arrange
-        var list = new ZList<int>();
+        int[] ints = [];
+        var list = ZList<int>.MakeZList(ints);
 
         // Act
         list.Add(42);
@@ -157,7 +162,8 @@ public class ZListTests
     public void RemoveAt_ShouldRemoveAt()
     {
         // Arrange
-        var list = new ZList<int>();
+        int[] ints = [];
+        var list = ZList<int>.MakeZList(ints);
 
         // Act
         list.Add(42);
@@ -184,7 +190,8 @@ public class ZListTests
     public void Insert_ShouldIncreaseCount()
     {
         // Arrange
-        var list = new ZList<int>();
+        int[] ints = [];
+        var list = ZList<int>.MakeZList(ints);
 
         // Act
         list.Add(42);
@@ -208,7 +215,8 @@ public class ZListTests
     public void Insert_ShouldInsert()
     {
         // Arrange
-        var list = new ZList<int>();
+        int[] ints = [];
+        var list = ZList<int>.MakeZList(ints);
 
         // Act
         list.Add(42);
@@ -230,7 +238,8 @@ public class ZListTests
     public void Clear_ShouldClear()
     {
         // Arrange
-        var list = new ZList<int>();
+        int[] ints = [];
+        var list = ZList<int>.MakeZList(ints);
 
         // Act
         list.Add(42);

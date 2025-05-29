@@ -14,25 +14,22 @@ public class ZStack<T, S> : IZStack<T> where S : IZList<T>
     
     public T Peek()
     {
-        if (Count <= 0)
-            throw new ArgumentOutOfRangeException(nameof(Count));
+        ArgumentOutOfRangeException.ThrowIfNegativeOrZero(Count);
         
         return _zlist[Count - 1];
     }
 
     public void Push(T item)
     {
-        if (item == null)
-            throw new ArgumentNullException(nameof(item));
+        ArgumentNullException.ThrowIfNull(item);
         
         _zlist.Add(item);
     }
 
     public void Pop()
     {
-        if (Count <= 0)
-            throw new ArgumentOutOfRangeException(nameof(Count));
-
+        ArgumentOutOfRangeException.ThrowIfNegativeOrZero(Count);
+        
         _zlist.RemoveAt(Count - 1);
     }
 

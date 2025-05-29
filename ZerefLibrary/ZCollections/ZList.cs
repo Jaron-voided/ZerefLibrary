@@ -1,4 +1,5 @@
 using System.Collections;
+using ZerefLibrary.utils;
 using ZerefLibrary.ZCollections.ZInterfaces;
 
 namespace ZerefLibrary.ZCollections;
@@ -25,28 +26,16 @@ public class ZList<T> : IZList<T>
         get => GetThis(index);
         set => SetThat(index, value);
     }
-
-    private void IsIndexInRange(int index)
-    {
-        if (index < 0 || index >= Count)
-            throw new IndexOutOfRangeException();
-    }
-
-    private void IsItemNull(T item)
-    {
-        if (item == null)
-            throw new ArgumentNullException(nameof(item));
-    }
-
+    
     private T GetThis(int index)
     {
-        IsIndexInRange(index);
+        ErrorHandling<T>.IsIndexInRange(index, Count);
         return Items[index];
     }
 
     private void SetThat(int index, T value)
     {
-        IsIndexInRange(index);
+        ErrorHandling<T>.IsIndexInRange(index, Count);
         Items[index] = value;
     }
     
@@ -54,14 +43,17 @@ public class ZList<T> : IZList<T>
     {
         var list = new ZList<T>();
         list.Count = items.Length;
-        list.Items = new T[list.Count * 8];
+        
+        // If an empty list is passed, I still need some space to be allocated
+        list.Items = list.Count == 0 ? new T[1 * 8] : new T[list.Count * 8];
+        
         Array.Copy(items, list.Items, items.Length);
         return list;
     }
     
     public void Add(T item)
     {
-        IsItemNull(item);
+        ErrorHandling<T>.IsItemNull(item);
         
         if (Count >= Items.Length)
         {
@@ -75,8 +67,8 @@ public class ZList<T> : IZList<T>
     
     public void Insert(int index, T item)
     {
-        IsItemNull(item);
-        IsIndexInRange(index);
+        ErrorHandling<T>.IsItemNull(item);
+        ErrorHandling<T>.IsIndexInRange(index, Count);
 
         for (int i = Count; i > index; i--)
         {
@@ -90,14 +82,14 @@ public class ZList<T> : IZList<T>
     public void Remove(T item)
     {
         int index = Array.IndexOf(Items, item);
-        IsIndexInRange(index);
+        ArgumentOutOfRangeException.ThrowIfNegative(index);
         
         RemoveAt(index);
     }
     
     public void RemoveAt(int index)
     {
-        IsIndexInRange(index);
+        ErrorHandling<T>.IsIndexInRange(index, Count);
 
         for (int i = index; i < Count - 1; i++)
         {

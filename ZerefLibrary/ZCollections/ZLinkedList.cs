@@ -1,23 +1,21 @@
 using System.Collections;
+using ZerefLibrary.utils;
 using ZerefLibrary.ZCollections.ZInterfaces;
 
 namespace ZerefLibrary.ZCollections;
 
 internal class ZLinkedList<T> : IZList<T>
 {
-    private ZLinkedListNode<T> Head { get; set; } = new ZLinkedListNode<T>();
-    private ZLinkedListNode<T> Tail { get; set; } = new ZLinkedListNode<T>();
+    private ZLinkedListNode<T>? Head { get; set; }
+    private ZLinkedListNode<T>? Tail { get; set; }
     public int Count { get; private set; }
     
     public IEnumerator<T> GetEnumerator()
     {
-        if (Head == null)
-            throw new InvalidOperationException("Head is null.");
-        
+        ErrorHandling<T>.IsNodeNull(Head);
         ZLinkedListNode<T> current = Head;
-
-        int i = 0;
         
+        int i = 0;
         while (i < Count)
         {
             yield return current.Value;
@@ -30,6 +28,26 @@ internal class ZLinkedList<T> : IZList<T>
     {
         return GetEnumerator();
     }
+
+    internal static ZLinkedList<T> MakeZLinkedList(ZLinkedListNode<T>[] zNodeArray)
+    {
+        ZLinkedList<T> zList = new ZLinkedList<T>();
+        
+        if (zNodeArray.Length > 0)
+        {
+            zList.Head = zNodeArray[0];
+            zList.Tail = zNodeArray[^1];
+            zList.Count = zNodeArray.Length;
+        }
+        else
+        {
+            zList.Head = null;
+            zList.Tail = null;
+            zList.Count = 0;
+        }
+
+        return zList;
+    }
     
     public T this[int index]
     {
@@ -39,157 +57,165 @@ internal class ZLinkedList<T> : IZList<T>
 
     private T GetThis(int index)
     {
-        
-        if (Head == null)
-            throw new InvalidOperationException("Head is null.");
-        
-        if (index < 0)
-            throw new ArgumentOutOfRangeException(nameof(index));
-        
-        ZLinkedListNode<T> current = Head;
-        int i = 0;
-        while (i < index)
-        {
-            current = current.Next;
-            i++;
-        }
+        var current = GetNodeAt(index);
+
         return current.Value;
     }
 
     private void SetThat(int index, T value)
     {
-        if (Head == null)
-            throw new InvalidOperationException("Head is null.");
-        
-        if (index < 0)
-            throw new ArgumentOutOfRangeException(nameof(index));
-
-        ZLinkedListNode<T> current = Head;
-        int count = 0;
-        while (count < index)
-        {
-            current = current.Next;
-            count++;
-        }
+        var current = GetNodeAt(index);
         current.Value = value;
     }
     
     public void Add(T item)
     {
-        if (item == null)
-            throw new ArgumentNullException(nameof(item));
+        ErrorHandling<T>.IsItemNull(item);
 
-        ZLinkedListNode<T> node = new ZLinkedListNode<T>(Tail, item, new ZLinkedListNode<T>());
-        Tail.Next = node;
-        Tail = node;
-        if (Count == 0) Head = node;
+        ZLinkedListNode<T> node = ZLinkedListNode<T>.MakeTailNode(Tail, item);
+        
+        if (Count == 0)
+        {
+            Head = Tail = node;
+        }
+        else
+        {
+            Tail.Next = node;
+            node.Previous = Tail;
+            Tail = node;
+        }
+
         Count++;
     }
 
     public void Insert(int index, T item)
     {
-        if (Head == null)
-            throw new InvalidOperationException("Head is null.");
-        
-        if (index < 0)
-            throw new ArgumentOutOfRangeException(nameof(index));        
-        
-        if (Count <= 0)
-            throw new ArgumentOutOfRangeException(nameof(Count));
-
-        ZLinkedListNode<T> node = new ZLinkedListNode<T>(Tail, item, new ZLinkedListNode<T>());
-        ZLinkedListNode<T> current = Head;
+        ErrorHandling<T>.IsNodeNull(Head);
+        ArgumentOutOfRangeException.ThrowIfNegative(index);
+        ArgumentOutOfRangeException.ThrowIfNegativeOrZero(Count);
         
         // If there are no items, this is Tail and Head
         if (index == 0)
         {
+            var node = ZLinkedListNode<T>.MakeHeadNode(item, Head);
+            Head.Previous = node;
             Head = node;
+            if (Count == 0) Tail = node;
         }
-
-        if (index == Count)
+        else if (index == Count)
         {
-            Tail = node;
+            Add(item);
+        }
+        else
+        {
+            var current = GetNodeAt(index);
+
+            var node = ZLinkedListNode<T>.MakeZNode(current.Previous, current, item);
+            current.Previous.Next = node;
+            current.Previous = node;
         }
         
-        for (int i = 0; i < index; i++)
-        {
-            current =  current.Next;
-        }
-
-        current.Next.Next.Previous = node;
-        current.Next = node;
+        Count++;
     }
 
-    public void Remove(T item)
+    // Once other remove methods find the correct node, this function removes it
+    private void Remove(ZLinkedListNode<T> node)
     {
-        if (Head == null)
-            throw new InvalidOperationException("Head is null.");
-     
-        if (item == null)
-            throw new ArgumentNullException(nameof(item));
-        
-        ZLinkedListNode<T> current = Head;
-        for (int i = 0; i < Count; i++)
-        {
-            if (current.Value != null && current.Value.Equals(item))
-            {
-                current.Previous.Next = current.Next;
-                current.Next.Previous = current.Previous;
-                
-                // Not sure why this is throwing a warning
-                current = null;
-                break;
-            }
-        }
+        if (node.Previous != null)
+            node.Previous.Next = node.Next;
+        else
+            Head = node.Next;
+
+        if (node.Next != null)
+            node.Next.Previous = node.Previous;
+        else
+            Tail = node.Previous;
 
         Count--;
+    }
+
+    // Should this be able to remove multiple instances of the same item, or only the first?
+    public void Remove(T item)
+    {
+        ErrorHandling<T>.IsNodeNull(Head);
+        ErrorHandling<T>.IsItemNull(item);
+        
+        ZLinkedListNode<T> current = Head;
+
+        var i = 0;
+        while (i < Count)
+        {
+            if (current.Value.Equals(item))
+            {
+                Remove(current);
+                break;
+            }
+            current = current.Next;
+            i++;
+        }
     }
 
     public void RemoveAt(int index)
     {
-        if (Head == null)
-            throw new InvalidOperationException("Head is null.");
+        var current = GetNodeAt(index);
         
-        if (index < 0)
-            throw new ArgumentOutOfRangeException(nameof(index));        
-        
-        ZLinkedListNode<T> current = Head;
-        for (int i = 0; i < Count; i++)
-        {
-            current = current.Next;
-        }
-        current.Previous.Next = current.Next;
-        current.Next.Previous = current.Previous;
-        current = null;
-        Count--;
+        Remove(current);
     }
-
+    
     public void Clear()
     {
         ZLinkedListNode<T> node = Head;
-        while (node != null)
+        
+        var i = 0;
+        while (i < Count)
         {
             var next = node.Next;
             node.Previous = null;
             node.Next = null;
             node = next;
+            i++;
         }
         Head = null;
         Tail = null;
         Count = 0;
     }
-
-    internal class ZLinkedListNode<T>()
+    
+    private ZLinkedListNode<T> GetNodeAt(int index)
     {
-        internal ZLinkedListNode<T> Previous;
-        internal ZLinkedListNode<T> Next;
-        internal T Value;
-        
-        internal ZLinkedListNode(ZLinkedListNode<T> previous, T value, ZLinkedListNode<T> next) : this()
+        ErrorHandling<T>.IsNodeNull(Head, "Head is null");
+        ErrorHandling<T>.IsIndexInRange(index, Count);
+
+        var current = Head;
+        int i = 0;
+
+        while (i < index)
         {
-            Previous = previous;
-            Next = next;
-            Value = value;
+            current = current.Next;
+            i++;
         }
+
+        return current;
+    }
+
+    internal class ZLinkedListNode<T>
+    {
+        internal ZLinkedListNode<T>? Previous;
+        internal ZLinkedListNode<T>? Next;
+        internal required T Value;
+        
+        internal static ZLinkedListNode<T> MakeZNode(ZLinkedListNode<T>? previous, ZLinkedListNode<T>? next, T value)
+        {
+            return new ZLinkedListNode<T>
+            {
+                Previous = previous,
+                Next = next,
+                Value = value
+            };
+        }
+
+        internal static ZLinkedListNode<T> MakeHeadNode(T value, ZLinkedListNode<T> next)
+            => MakeZNode(null, next, value);
+        internal static ZLinkedListNode<T> MakeTailNode(ZLinkedListNode<T> previous, T value)
+            => MakeZNode(previous, null, value);
     }
 }
