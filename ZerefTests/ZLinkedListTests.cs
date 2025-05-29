@@ -6,7 +6,7 @@ public class ZLinkedListTests
 {
     private ZLinkedList<int> MakeEmptyList()
     {
-        return ZLinkedList<int>.MakeZLinkedList(Array.Empty<ZLinkedList<int>.ZLinkedListNode<int>>());
+        return ZLinkedList<int>.Create(Array.Empty<ZLinkedList<int>.ZLinkedListNode<int>>());
     }
 
     [Fact]

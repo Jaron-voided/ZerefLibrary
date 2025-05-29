@@ -12,8 +12,9 @@ internal class ZLinkedList<T> : IZList<T>
     
     public IEnumerator<T> GetEnumerator()
     {
-        ErrorHandling<T>.IsNodeNull(Head);
-        ZLinkedListNode<T> current = Head;
+        ZLinkedListNode<T>.ThrowIfNodeIsNull(Head, "Head node is null");
+        // The question marks get rid of the possible null warning, but is this how it should be handled?
+        ZLinkedListNode<T>? current = Head;
         
         int i = 0;
         while (i < Count)
@@ -29,7 +30,7 @@ internal class ZLinkedList<T> : IZList<T>
         return GetEnumerator();
     }
 
-    internal static ZLinkedList<T> MakeZLinkedList(ZLinkedListNode<T>[] zNodeArray)
+    internal static ZLinkedList<T> Create(ZLinkedListNode<T>[] zNodeArray)
     {
         ZLinkedList<T> zList = new ZLinkedList<T>();
         
@@ -57,9 +58,7 @@ internal class ZLinkedList<T> : IZList<T>
 
     private T GetThis(int index)
     {
-        var current = GetNodeAt(index);
-
-        return current.Value;
+        return GetNodeAt(index).Value;
     }
 
     private void SetThat(int index, T value)
@@ -70,7 +69,7 @@ internal class ZLinkedList<T> : IZList<T>
     
     public void Add(T item)
     {
-        ErrorHandling<T>.IsItemNull(item);
+        ErrorHandling<T>.ThrowIfItemIsNull(item);
 
         ZLinkedListNode<T> node = ZLinkedListNode<T>.MakeTailNode(Tail, item);
         
@@ -90,8 +89,7 @@ internal class ZLinkedList<T> : IZList<T>
 
     public void Insert(int index, T item)
     {
-        ErrorHandling<T>.IsNodeNull(Head);
-        ArgumentOutOfRangeException.ThrowIfNegative(index);
+        ZLinkedListNode<T>.ThrowIfNodeIsNull(Head, "Head node is null");        ArgumentOutOfRangeException.ThrowIfNegative(index);
         ArgumentOutOfRangeException.ThrowIfNegativeOrZero(Count);
         
         // If there are no items, this is Tail and Head
@@ -110,7 +108,7 @@ internal class ZLinkedList<T> : IZList<T>
         {
             var current = GetNodeAt(index);
 
-            var node = ZLinkedListNode<T>.MakeZNode(current.Previous, current, item);
+            var node = ZLinkedListNode<T>.Create(current.Previous, current, item);
             current.Previous.Next = node;
             current.Previous = node;
         }
@@ -121,11 +119,13 @@ internal class ZLinkedList<T> : IZList<T>
     // Once other remove methods find the correct node, this function removes it
     private void Remove(ZLinkedListNode<T> node)
     {
+        // Checks if there is a previous node, if not we're removing the head, .Next is now head
         if (node.Previous != null)
             node.Previous.Next = node.Next;
         else
             Head = node.Next;
 
+        // Checks if we are the tail
         if (node.Next != null)
             node.Next.Previous = node.Previous;
         else
@@ -137,14 +137,15 @@ internal class ZLinkedList<T> : IZList<T>
     // Should this be able to remove multiple instances of the same item, or only the first?
     public void Remove(T item)
     {
-        ErrorHandling<T>.IsNodeNull(Head);
-        ErrorHandling<T>.IsItemNull(item);
+        ZLinkedListNode<T>.ThrowIfNodeIsNull(Head, "Head node is null");
+        ErrorHandling<T>.ThrowIfItemIsNull(item);
         
         ZLinkedListNode<T> current = Head;
 
         var i = 0;
         while (i < Count)
         {
+            // Figure out what boxing allocations are...
             if (current.Value.Equals(item))
             {
                 Remove(current);
@@ -182,8 +183,8 @@ internal class ZLinkedList<T> : IZList<T>
     
     private ZLinkedListNode<T> GetNodeAt(int index)
     {
-        ErrorHandling<T>.IsNodeNull(Head, "Head is null");
-        ErrorHandling<T>.IsIndexInRange(index, Count);
+        ZLinkedListNode<T>.ThrowIfNodeIsNull(Head, "Head is null");
+        ErrorHandling<T>.ThrowIfOutOfRange(index, Count);
 
         var current = Head;
         int i = 0;
@@ -199,11 +200,12 @@ internal class ZLinkedList<T> : IZList<T>
 
     internal class ZLinkedListNode<T>
     {
+        // Question marks work but I don't feel this is the best way??
         internal ZLinkedListNode<T>? Previous;
         internal ZLinkedListNode<T>? Next;
-        internal required T Value;
+        internal required T? Value;
         
-        internal static ZLinkedListNode<T> MakeZNode(ZLinkedListNode<T>? previous, ZLinkedListNode<T>? next, T value)
+        internal static ZLinkedListNode<T> Create(ZLinkedListNode<T>? previous, ZLinkedListNode<T>? next, T value)
         {
             return new ZLinkedListNode<T>
             {
@@ -214,8 +216,14 @@ internal class ZLinkedList<T> : IZList<T>
         }
 
         internal static ZLinkedListNode<T> MakeHeadNode(T value, ZLinkedListNode<T> next)
-            => MakeZNode(null, next, value);
+            => Create(null, next, value);
         internal static ZLinkedListNode<T> MakeTailNode(ZLinkedListNode<T> previous, T value)
-            => MakeZNode(previous, null, value);
+            => Create(previous, null, value);
+        
+        internal static void ThrowIfNodeIsNull(ZLinkedList<T>.ZLinkedListNode<T> node, string warning = "Node is null")
+        {
+            if (node == null)
+                throw new InvalidOperationException(warning);
+        }
     }
 }

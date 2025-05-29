@@ -9,7 +9,7 @@ public class ZListTests
     {
         // Arrange
         int[] ints = [];
-        var list = ZList<int>.MakeZList(ints);
+        var list = ZList<int>.Create(ints);
 
         // Act
         list.Add(42);
@@ -28,7 +28,7 @@ public class ZListTests
     {
         // Arrange
         int[] ints = [];
-        var list = ZList<int>.MakeZList(ints);
+        var list = ZList<int>.Create(ints);
 
         // Act
         list.Add(42);
@@ -57,7 +57,7 @@ public class ZListTests
     {
         // Arrange
         int[] ints = [];
-        var list = ZList<int>.MakeZList(ints);
+        var list = ZList<int>.Create(ints);
 
         // Act
         list.Add(42);
@@ -93,7 +93,7 @@ public class ZListTests
     {
         // Arrange
         int[] ints = [];
-        var list = ZList<int>.MakeZList(ints);
+        var list = ZList<int>.Create(ints);
 
         // Act
         list.Add(42);
@@ -113,7 +113,7 @@ public class ZListTests
     {
         // Arrange
         int[] ints = [];
-        var list = ZList<int>.MakeZList(ints);
+        var list = ZList<int>.Create(ints);
 
         // Act
         list.Add(42);
@@ -137,7 +137,7 @@ public class ZListTests
     {
         // Arrange
         int[] ints = [];
-        var list = ZList<int>.MakeZList(ints);
+        var list = ZList<int>.Create(ints);
 
         // Act
         list.Add(42);
@@ -163,7 +163,7 @@ public class ZListTests
     {
         // Arrange
         int[] ints = [];
-        var list = ZList<int>.MakeZList(ints);
+        var list = ZList<int>.Create(ints);
 
         // Act
         list.Add(42);
@@ -191,7 +191,7 @@ public class ZListTests
     {
         // Arrange
         int[] ints = [];
-        var list = ZList<int>.MakeZList(ints);
+        var list = ZList<int>.Create(ints);
 
         // Act
         list.Add(42);
@@ -216,7 +216,7 @@ public class ZListTests
     {
         // Arrange
         int[] ints = [];
-        var list = ZList<int>.MakeZList(ints);
+        var list = ZList<int>.Create(ints);
 
         // Act
         list.Add(42);
@@ -239,7 +239,7 @@ public class ZListTests
     {
         // Arrange
         int[] ints = [];
-        var list = ZList<int>.MakeZList(ints);
+        var list = ZList<int>.Create(ints);
 
         // Act
         list.Add(42);
