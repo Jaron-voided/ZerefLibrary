@@ -8,7 +8,8 @@ public class ZListTests
     public void Add_ShouldIncreaseCount()
     {
         // Arrange
-        var list = new ZList<int>();
+        int[] ints = [];
+        var list = ZList<int>.MakeZList(ints);
 
         // Act
         list.Add(42);
