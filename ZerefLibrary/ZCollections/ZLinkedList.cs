@@ -162,6 +162,27 @@ internal class ZLinkedList<T> : IZList<T>
         
         Remove(current);
     }
+
+    // This is verbatim the same as remove(T item) minus the break, figure out how to compress this tommorow
+    public void RemoveAll(T item)
+    {
+        ZLinkedListNode<T>.ThrowIfNodeIsNull(Head, "Head node is null");
+        ErrorHandling<T>.ThrowIfItemIsNull(item);
+    
+        ZLinkedListNode<T> current = Head;
+
+        var i = 0;
+        while (i < Count)
+        {
+            // Figure out what boxing allocations are...
+            if (current.Value.Equals(item))
+            {
+                Remove(current);
+            }
+            current = current.Next;
+            i++;
+        }
+    }
     
     public void Clear()
     {

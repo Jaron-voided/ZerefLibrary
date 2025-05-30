@@ -111,7 +111,40 @@ public class ZList<T> : IZList<T>
         
         Count--;
     }
-    
+
+    public void RemoveAll(T item)
+    {
+        List<int> indexes = FindAllIndexes(item);
+        foreach (int index in indexes)
+        {
+            RemoveAt(index);
+        }
+    }
+
+    // Make this better tommorow
+    public List<int> FindAllIndexes<T>(T item)
+    {
+        List<T> itemsToIndex = new();
+
+        foreach (var i in Items)
+        {
+            // I'm not doing java I don't know why the == doesn't work
+            if (i.Equals(item))
+            {
+                itemsToIndex.Add(item);
+            }
+        }
+
+        List<int> indexes = new();
+
+        foreach (var itemToIndex in itemsToIndex)
+        {
+            int index = Array.IndexOf(Items, item);
+            indexes.Add(index);
+        }
+
+        return indexes;
+    }
     public void Clear()
     {
         Array.Clear(Items, 0, Count);

@@ -9,5 +9,6 @@ public interface IZList<T> : IEnumerable<T>
     void Insert(int index, T item);
     void Remove(T item);
     void RemoveAt(int index);
+    void RemoveAll(T item);
     void Clear();
 }
