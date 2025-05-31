@@ -100,8 +100,8 @@ public class ZListTests
         list.Add(2);
 
         // Assert
-        Assert.Throws<IndexOutOfRangeException>(() => list[-1]);
-        Assert.Throws<IndexOutOfRangeException>(() => list[list.Count + 30]);
+        Assert.Throws<ArgumentOutOfRangeException>(() => list[-1]);
+        Assert.Throws<ArgumentOutOfRangeException>(() => list[list.Count + 30]);
         
         // Failing
         /*Assert.Throws<IndexOutOfRangeException>(() => list[0]);
@@ -254,5 +254,70 @@ public class ZListTests
         
         // Failing
         /*Assert.Equal(3, list.Count);*/
+    }
+    
+    [Fact]
+    public void RemoveAll_ShouldRemoveAllMatchingItems()
+    {
+        // Arrange
+        int[] ints = [];
+        var list = ZList<int>.Create(ints);
+
+        list.Add(42);
+        list.Add(43);
+        list.Add(42);
+        list.Add(5);
+        list.Add(42);  // three 42s
+
+        // Act
+        list.RemoveAll(42);
+
+        // Assert
+        Assert.Equal(2, list.Count);
+        
+        // This is conceding that the items remain in my array, but are invisible in my list because of Count
+        // Is this correct, or do I need to remove them from the array completely?
+        Assert.DoesNotContain(42, list.Items.Take(list.Count));
+    }
+
+    [Fact]
+    public void RemoveAll_ShouldDoNothingIfNoMatch()
+    {
+        // Arrange
+        int[] ints = [];
+        var list = ZList<int>.Create(ints);
+
+        list.Add(1);
+        list.Add(2);
+        list.Add(3);
+
+        // Act
+        list.RemoveAll(99);  // no match
+
+        // Assert
+        Assert.Equal(3, list.Count);
+    }
+
+    [Fact]
+    public void FindAllIndexes_ShouldReturnAllMatchingIndexes()
+    {
+        // Arrange
+        int[] ints = [];
+        var list = ZList<int>.Create(ints);
+
+        list.Add(42);
+        list.Add(43);
+        list.Add(42);
+        list.Add(5);
+        list.Add(42);  // 42 at index 0, 2, 4
+
+        // Act
+        var indexes = list.FindAllIndexes(42);
+
+        // Assert
+        Assert.Equal(3, indexes.Count);
+        Assert.Contains(0, indexes);
+        Assert.Contains(2, indexes);
+        Assert.Contains(4, indexes);
     }
 }

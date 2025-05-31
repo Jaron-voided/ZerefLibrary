@@ -2,6 +2,7 @@ using ZerefLibrary.ZCollections.ZInterfaces;
 
 namespace ZerefLibrary.ZCollections;
 
+// Not using S again, figure this out
 public class ZStack<T, S> : IZStack<T> where S : IZList<T>
 {
     private IZList<T> _zlist;

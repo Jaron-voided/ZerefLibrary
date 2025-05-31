@@ -12,7 +12,7 @@ public class ZList<T> : IZList<T>
     private const int GrowthFactor = 2;
     public IEnumerator<T> GetEnumerator()
     {
-        foreach (T item in Items)
+        foreach (var item in Items)
         {
             yield return item;
         }
@@ -55,35 +55,41 @@ public class ZList<T> : IZList<T>
     
     public void Add(T item)
     {
-        ErrorHandling<T>.ThrowIfItemIsNull(item);
+        ArgumentNullException.ThrowIfNull(item);
         
         Insert(Count, item);
     }
     
     public void Insert(int index, T item)
     {
-        ErrorHandling<T>.ThrowIfItemIsNull(item);
+        ArgumentNullException.ThrowIfNull(item);
         
         //Unsure if I need this currently.
-        //ErrorHandling<T>.ThrowIfOutOfRange(index, Count);
+        ErrorHandling<T>.ThrowIfOutOfRange(index, Count);
         
         EnsureCapacity();
 
         // This is probably used elsewhere, try to extract it
-        for (int i = Count; i > index; i--)
-        {
-            Items[i] = Items[i - 1];
-        }
+        ShiftToInsert(index);
         
         Items[index] = item;
         Count++;
     }
 
-    protected void EnsureCapacity()
+    private void ShiftToInsert(int index)
+    {
+        for (var i = Count; i > index; i--)
+        {
+            Items[i] = Items[i - 1];
+        }
+    }
+
+    // Figure out how to make this protected
+    internal void EnsureCapacity()
     {
         if (Count >= Items.Length)
         {
-            T[] newArray = new T[Count * GrowthFactor];
+            var newArray = new T[Count * GrowthFactor];
             Array.Copy(Items, newArray, Count);
             Items = newArray;
         }
@@ -91,10 +97,12 @@ public class ZList<T> : IZList<T>
 
     public void Remove(T item)
     {
-        int index = Array.IndexOf(Items, item);
+        var index = Array.IndexOf(Items, item);
         // ?? Should I not throw an exception and continue?
-        ArgumentOutOfRangeException.ThrowIfNegative(index);
-        
+        //ArgumentOutOfRangeException.ThrowIfNegative(index);
+      
+        // if index does not exist (returns a negative) just continue
+        if (index < 0) return;
         RemoveAt(index);
     }
     
@@ -103,44 +111,42 @@ public class ZList<T> : IZList<T>
         // ?? Should I not throw an exception and continue?
         ErrorHandling<T>.ThrowIfOutOfRange(index, Count);
 
-        // Yup, used again here it seems
-        for (int i = index; i < Count - 1; i++)
+        // Yup, ALMOST used again here it seems
+        ShiftToRemove(index);
+        
+        Count--;
+    }
+
+    private void ShiftToRemove(int index)
+    {
+        for (var i = index; i < Count - 1; i++)
         {
             Items[i] = Items[i + 1];
         }
-        
-        Count--;
     }
 
     public void RemoveAll(T item)
     {
         List<int> indexes = FindAllIndexes(item);
-        foreach (int index in indexes)
+        for (int i = Count - 1; i >= 0; i--)
         {
-            RemoveAt(index);
+            if (Items[i].Equals(item))
+            {
+                RemoveAt(i);
+            }
         }
     }
 
-    // Make this better tommorow
     public List<int> FindAllIndexes<T>(T item)
     {
-        List<T> itemsToIndex = new();
-
-        foreach (var i in Items)
-        {
-            // I'm not doing java I don't know why the == doesn't work
-            if (i.Equals(item))
-            {
-                itemsToIndex.Add(item);
-            }
-        }
-
         List<int> indexes = new();
-
-        foreach (var itemToIndex in itemsToIndex)
+        
+        for (int i = 0; i < Count; i++)
         {
-            int index = Array.IndexOf(Items, item);
-            indexes.Add(index);
+            if (Items[i].Equals(item))
+            {
+                indexes.Add(i);
+            }
         }
 
         return indexes;

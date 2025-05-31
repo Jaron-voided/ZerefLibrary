@@ -13,10 +13,11 @@ internal class ZLinkedList<T> : IZList<T>
     public IEnumerator<T> GetEnumerator()
     {
         ZLinkedListNode<T>.ThrowIfNodeIsNull(Head, "Head node is null");
-        // The question marks get rid of the possible null warning, but is this how it should be handled?
-        ZLinkedListNode<T>? current = Head;
         
-        int i = 0;
+        // The question marks get rid of the possible null warning, but is this how it should be handled?
+        var current = Head;
+        
+        var i = 0;
         while (i < Count)
         {
             yield return current.Value;
@@ -32,7 +33,7 @@ internal class ZLinkedList<T> : IZList<T>
 
     internal static ZLinkedList<T> Create(ZLinkedListNode<T>[] zNodeArray)
     {
-        ZLinkedList<T> zList = new ZLinkedList<T>();
+        var zList = new ZLinkedList<T>();
         
         if (zNodeArray.Length > 0)
         {
@@ -71,7 +72,7 @@ internal class ZLinkedList<T> : IZList<T>
     {
         ErrorHandling<T>.ThrowIfItemIsNull(item);
 
-        ZLinkedListNode<T> node = ZLinkedListNode<T>.MakeTailNode(Tail, item);
+        var node = ZLinkedListNode<T>.MakeTailNode(Tail, item);
         
         if (Count == 0)
         {
@@ -134,23 +135,24 @@ internal class ZLinkedList<T> : IZList<T>
         Count--;
     }
 
-    // Should this be able to remove multiple instances of the same item, or only the first?
     public void Remove(T item)
     {
         ZLinkedListNode<T>.ThrowIfNodeIsNull(Head, "Head node is null");
         ErrorHandling<T>.ThrowIfItemIsNull(item);
         
-        ZLinkedListNode<T> current = Head;
+        var current = Head;
 
         var i = 0;
         while (i < Count)
         {
             // Figure out what boxing allocations are...
+            // Not java, wont allow me to use "=="
             if (current.Value.Equals(item))
             {
                 Remove(current);
                 break;
             }
+            
             current = current.Next;
             i++;
         }
@@ -169,7 +171,7 @@ internal class ZLinkedList<T> : IZList<T>
         ZLinkedListNode<T>.ThrowIfNodeIsNull(Head, "Head node is null");
         ErrorHandling<T>.ThrowIfItemIsNull(item);
     
-        ZLinkedListNode<T> current = Head;
+        var current = Head;
 
         var i = 0;
         while (i < Count)
@@ -186,7 +188,7 @@ internal class ZLinkedList<T> : IZList<T>
     
     public void Clear()
     {
-        ZLinkedListNode<T> node = Head;
+        var node = Head;
         
         var i = 0;
         while (i < Count)
@@ -208,7 +210,7 @@ internal class ZLinkedList<T> : IZList<T>
         ErrorHandling<T>.ThrowIfOutOfRange(index, Count);
 
         var current = Head;
-        int i = 0;
+        var i = 0;
 
         while (i < index)
         {

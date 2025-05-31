@@ -3,6 +3,7 @@ using ZerefLibrary.ZCollections.ZInterfaces;
 
 namespace ZerefLibrary.ZCollections;
 
+// Type S is never used, what am I doing wrong here?
 public class ZQueue<T, S> : IZQueue<T> where S : IZList<T>
 {
     private IZList<T> _zlist;
@@ -14,25 +15,23 @@ public class ZQueue<T, S> : IZQueue<T> where S : IZList<T>
     
     public T Peek()
     {
-        if (Count <= 0)
-            throw new ArgumentOutOfRangeException(nameof(Count));
-        
+        ArgumentOutOfRangeException.ThrowIfNegativeOrZero(Count);
+  
         return _zlist[0];
     }
 
     public void Enqueue(T item)
     {
-        if (item == null)
-            throw new ArgumentNullException(nameof(item));
+        // Boxing allocation again!
+        ArgumentNullException.ThrowIfNull(item);
         
         _zlist.Add(item);
     }
 
     public void Dequeue()
     {
-        if (Count <= 0)
-            throw new ArgumentOutOfRangeException(nameof(Count));
-
+        ArgumentOutOfRangeException.ThrowIfNegativeOrZero(Count);
+        
         _zlist.RemoveAt(0);
     }
 
