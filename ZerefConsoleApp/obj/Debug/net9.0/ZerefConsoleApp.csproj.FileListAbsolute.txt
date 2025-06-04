@@ -16,3 +16,4 @@
 /home/zeref-dragneel/Desktop/ZerefLib/ZerefConsoleApp/obj/Debug/net9.0/ZerefConsoleApp.pdb
 /home/zeref-dragneel/Desktop/ZerefLib/ZerefConsoleApp/obj/Debug/net9.0/ZerefConsoleApp.genruntimeconfig.cache
 /home/zeref-dragneel/Desktop/ZerefLib/ZerefConsoleApp/obj/Debug/net9.0/ref/ZerefConsoleApp.dll
+/home/zeref-dragneel/Desktop/ZerefLib/ZerefConsoleApp/obj/Debug/net9.0/ZerefConsoleApp.sourcelink.json
