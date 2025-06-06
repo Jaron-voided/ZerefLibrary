@@ -2,26 +2,28 @@ using ZerefLibrary.ZCollections.ZInterfaces;
 
 namespace ZerefLibrary.ZCollections;
 
-internal class ZBinaryTree<T> : IZBinaryTree<T>
+public class ZBinaryTree<T> : IZBinaryTree<T>
 {
     public IZBinaryTree<T>.IZBinaryTreeNode<T> Root { get; set; } = new  ZBinaryTreeNode<T>();
     public int Count { get; private set; }
     public void SetRoot(T item)
     {
-        ZBinaryTreeNode<T> root = ZBinaryTreeNode<T>.Create(item);
+        var root = ZBinaryTreeNode<T>.Create(item);
         Root = root;
     }
 
     public void InsertLeft(IZBinaryTree<T>.IZBinaryTreeNode<T> parent, T item)
     {
-        ZBinaryTreeNode<T> leftNode = ZBinaryTreeNode<T>.Create(item);
+        var leftNode = ZBinaryTreeNode<T>.Create(item);
         parent.Left = leftNode;
+        Count++;
     }
 
     public void InsertRight(IZBinaryTree<T>.IZBinaryTreeNode<T> parent, T item)
     {
-        ZBinaryTreeNode<T> rightNode = ZBinaryTreeNode<T>.Create(item);
+        var rightNode = ZBinaryTreeNode<T>.Create(item);
         parent.Right = rightNode;
+        Count++;
     }
 
     public void Remove(T item)
@@ -38,33 +40,91 @@ internal class ZBinaryTree<T> : IZBinaryTree<T>
     {
         // Do I need to reorder the whole tree and move something into its spot?
         parent.Left = null;
+        Count--;
     }
-
+    // Do these need combined?
     public void RemoveRight(IZBinaryTree<T>.IZBinaryTreeNode<T> parent)
     {
         // Do I need to reorder the whole tree and move something into its spot?
         parent.Right = null;
+        Count--;
     }
 
     public bool Contains(T item)
     {
         throw new NotImplementedException();
     }
-
-    public void TraverseInOrder(Action<T> action)
+    
+    public IEnumerable<T> TraverseInOrder()
     {
-        throw new NotImplementedException();
+        return TraverseInOrder(Root);
     }
 
-    public void TraversePreOrder(Action<T> action)
+    public IEnumerable<T> TraverseInOrder(IZBinaryTree<T>.IZBinaryTreeNode<T> current)
     {
-        throw new NotImplementedException();
+
+            if (current.Left != null)
+            {
+                foreach (var item in TraverseInOrder(current.Left))
+                    yield return item;
+            }
+            
+            yield return current.Value;
+            Console.WriteLine(current.Value);
+
+            if (current.Right != null)
+            {
+                foreach (var item in TraverseInOrder(current.Right))
+                    yield return item;
+            }
     }
 
-    public void TraversePostOrder(Action<T> action)
+    public IEnumerable<T> TraversePreOrder()
     {
-        throw new NotImplementedException();
+        return TraversePreOrder(Root);
     }
+
+    public IEnumerable<T> TraversePreOrder(IZBinaryTree<T>.IZBinaryTreeNode<T> current)
+    {
+        yield return current.Value;
+        Console.WriteLine(current.Value);
+        
+        if (current.Left != null)
+        {
+            foreach (var item in TraversePreOrder(current.Left))
+                yield return item;
+        }
+        
+        if (current.Right != null)
+        {
+            foreach (var item in TraversePreOrder(current.Right))
+                yield return item;
+        }
+    }
+
+    public IEnumerable<T> TraversePostOrder()
+    {
+        return TraversePostOrder(Root);
+    }
+    
+    public IEnumerable<T> TraversePostOrder(IZBinaryTree<T>.IZBinaryTreeNode<T> current)
+    {
+        if (current.Left != null)
+        {
+            foreach (var item in TraversePostOrder(current.Left))
+                yield return item;
+        }
+        
+        if (current.Right != null)
+        {
+            foreach (var item in TraversePostOrder(current.Right))
+                yield return item;
+        }
+        
+        yield return current.Value;
+        Console.WriteLine(current.Value);
+    }
+
 
     public void Clear()
     {
@@ -73,17 +133,27 @@ internal class ZBinaryTree<T> : IZBinaryTree<T>
         // Get to the lowest right node and store its parent
         while (Root.Right != null)
         {
+            IZBinaryTree<T>.IZBinaryTreeNode<T> currentParent = null;
             while (current.Right != null)
             {
-                IZBinaryTree<T>.IZBinaryTreeNode<T> currentParent = current;
+                currentParent = current;
                 current = current.Right;
-                current = null;
             }
+            currentParent.Left = null;
+            Count--;
+            currentParent.Right = null;
+            Count--;
             
-            
+            while (current.Left != null)
+            {
+                currentParent = current;
+                current = current.Left;
+            }
+            currentParent.Left = null;
+            Count--;
+            currentParent.Right = null;
+            Count--;
         }
-        
-        
     }
 
     private class ZBinaryTreeNode<T> : IZBinaryTree<T>.IZBinaryTreeNode<T>
