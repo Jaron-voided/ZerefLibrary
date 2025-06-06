@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using ZerefLibrary.ZCollections;
 
+/*
 internal class Program
 {
     static void Main()
@@ -32,4 +33,5 @@ internal class Program
              Console.WriteLine(item);
     }
 }
+*/
 
