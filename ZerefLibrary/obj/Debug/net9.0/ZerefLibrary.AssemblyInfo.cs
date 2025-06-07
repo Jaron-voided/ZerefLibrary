@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("ZerefLibrary")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+b4292b73097c0a52da714348bfca71f0282346ff")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+d1e76afaf7fa45f5c4d3c7bbcb9e731e7dfa5e5f")]
 [assembly: System.Reflection.AssemblyProductAttribute("ZerefLibrary")]
 [assembly: System.Reflection.AssemblyTitleAttribute("ZerefLibrary")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

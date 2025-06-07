@@ -1,27 +1,29 @@
 namespace ZerefLibrary.ZInterfaces;
 
-internal interface IZBinaryTree<TKey, TValue>
+public interface IZBinaryTree<TKey, TValue> : IEnumerable<KeyValuePair<TKey, TValue>>
 {
+    TValue this[TKey key] { get; set; }
     IZBinaryTreeNode Root { get; }
     int Count { get; }
-    
+    /*ICollection<TKey> Keys { get; }
+    ICollection<TValue> Values { get; }*/
+    void Add(TKey key, TValue value);
+    TKey AddWithoutKey(TValue value, out TKey key);
     bool ContainsKey(TKey key);
-    TValue GetValue(TKey key);
+    bool TryGetValue(TKey key, out TValue value);
+    //TValue GetValue(TKey key);
     TKey GetFirstKey(TValue value);
     IEnumerable<TKey> GetAllKeys(TValue value);
     
-    void SetRoot(TValue item);
+    TKey SetRootWithoutKey(TValue item, out TKey key);
     // Should I have overloads for all these methods?
     void SetRoot(TKey key, TValue item);
-    /*void InsertLeft(IZBinaryTreeNode<T> parent, T item);
-    void InsertRight(IZBinaryTreeNode<T> parent, T item);*/
-
-    void Insert(TValue value);
+    TKey InsertWithoutKey(TValue value, out TKey key);
     // If I insert it in the middle somewhere, do I have to move everything else around?
     void Insert(TKey key, TValue value);
     
-    void Remove(TValue item);
-    void RemoveAt(TKey key);
+    bool RemoveFirst(TValue item);
+    bool RemoveAt(TKey key);
     void RemoveAll(TValue item);
     
     // Could these be paired together also?
@@ -31,19 +33,21 @@ internal interface IZBinaryTree<TKey, TValue>
     bool Contains(TValue item);
     
     // I can't return TKey and TValue for the IEnumerables
-    IEnumerable<TValue> TraverseInOrder();
-    IEnumerable<TValue> TraversePreOrder();
-    IEnumerable<TValue> TraversePostOrder();
+    IEnumerable<KeyValuePair<TKey, TValue>> TraverseInOrder();
+    IEnumerable<KeyValuePair<TKey, TValue>> TraversePreOrder();
+    IEnumerable<KeyValuePair<TKey, TValue>> TraversePostOrder();
     
     void Clear();
     
     // Should I remove the TKey TValue from the node so it's not being shadowed?
 
-    internal interface IZBinaryTreeNode/*<TKey, TValue>*/
+    public interface IZBinaryTreeNode/*<TKey, TValue>*/
     {
         IZBinaryTreeNode Left { get; set; }
 
         IZBinaryTreeNode Right { get; set; }
+        
+        
 
         // Value last since it might be different sizes
         TKey Key { get; }

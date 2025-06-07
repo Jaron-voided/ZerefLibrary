@@ -1,181 +1,219 @@
-using ZerefLibrary.ZCollections.ZInterfaces;
+using System.Collections;
+using ZerefLibrary.ZInterfaces;
 
 namespace ZerefLibrary.ZCollections;
 
-public class ZBinaryTree<T> : IZBinaryTree<T>
+public class ZBinaryTree<TKey, TValue> : IZBinaryTree<TKey, TValue> where TKey : IComparable<TKey>
 {
-    public IZBinaryTree<T>.IZBinaryTreeNode<T> Root { get; set; } = new  ZBinaryTreeNode<T>();
-    public int Count { get; private set; }
-    public void SetRoot(T item)
+    public IZBinaryTree<TKey, TValue>.IZBinaryTreeNode Root { get; }
+    public int Count { get; }
+
+    public IEnumerator<KeyValuePair<TKey, TValue>> GetEnumerator()
     {
-        var root = ZBinaryTreeNode<T>.Create(item);
-        Root = root;
+        return TraverseInOrder().GetEnumerator();
     }
 
-    public void InsertLeft(IZBinaryTree<T>.IZBinaryTreeNode<T> parent, T item)
+    IEnumerator IEnumerable.GetEnumerator()
     {
-        var leftNode = ZBinaryTreeNode<T>.Create(item);
-        parent.Left = leftNode;
-        Count++;
+        return GetEnumerator();
     }
 
-    public void InsertRight(IZBinaryTree<T>.IZBinaryTreeNode<T> parent, T item)
+    public TValue this[TKey key]
     {
-        var rightNode = ZBinaryTreeNode<T>.Create(item);
-        parent.Right = rightNode;
-        Count++;
+        get => GetThis(key);
+        set => SetThat(key, value);
     }
 
-    public void Remove(T item)
+    public TValue GetThis(TKey key)
     {
-        throw new NotImplementedException();
-    }
-
-    public void RemoveAll(T item)
-    {
-        throw new NotImplementedException();
-    }
-
-    public void RemoveLeft(IZBinaryTree<T>.IZBinaryTreeNode<T> parent)
-    {
-        // Do I need to reorder the whole tree and move something into its spot?
-        parent.Left = null;
-        Count--;
-    }
-    // Do these need combined?
-    public void RemoveRight(IZBinaryTree<T>.IZBinaryTreeNode<T> parent)
-    {
-        // Do I need to reorder the whole tree and move something into its spot?
-        parent.Right = null;
-        Count--;
-    }
-
-    public bool Contains(T item)
-    {
-        throw new NotImplementedException();
+        var current = Root;
+        // Still won't let me use the == operand
+        while (true)
+        {
+            if (current.Key.Equals(key))
+            {
+                return current.Value;
+            }
+            else if (key.CompareTo(current.Key) < 0)
+            {
+                current = current.Left;
+            }
+            else
+            {
+                current = current.Right;
+            }
+        }
     }
     
-    public IEnumerable<T> TraverseInOrder()
+    // These are similar, can I compress them?
+    // Need to add null checks... later
+    public void SetThat(TKey key, TValue value)
     {
-        return TraverseInOrder(Root);
-    }
-
-    public IEnumerable<T> TraverseInOrder(IZBinaryTree<T>.IZBinaryTreeNode<T> current)
-    {
-
-            if (current.Left != null)
-            {
-                foreach (var item in TraverseInOrder(current.Left))
-                    yield return item;
-            }
-            
-            yield return current.Value;
-            Console.WriteLine(current.Value);
-
-            if (current.Right != null)
-            {
-                foreach (var item in TraverseInOrder(current.Right))
-                    yield return item;
-            }
-    }
-
-    public IEnumerable<T> TraversePreOrder()
-    {
-        return TraversePreOrder(Root);
-    }
-
-    public IEnumerable<T> TraversePreOrder(IZBinaryTree<T>.IZBinaryTreeNode<T> current)
-    {
-        yield return current.Value;
-        Console.WriteLine(current.Value);
-        
-        if (current.Left != null)
+        var current = Root;
+        // Still won't let me use the == operand
+        while (true)
         {
-            foreach (var item in TraversePreOrder(current.Left))
-                yield return item;
+            if (current.Key.Equals(key))
+            {
+                current.Value = value;
+                return;
+            }
+            else if (key.CompareTo(current.Key) < 0)
+            {
+                current = current.Left;
+            }
+            else
+            {
+                current = current.Right;
+            }
         }
-        
-        if (current.Right != null)
-        {
-            foreach (var item in TraversePreOrder(current.Right))
-                yield return item;
-        }
-    }
-
-    public IEnumerable<T> TraversePostOrder()
-    {
-        return TraversePostOrder(Root);
     }
     
-    public IEnumerable<T> TraversePostOrder(IZBinaryTree<T>.IZBinaryTreeNode<T> current)
+    // I'm unsure if I need to reorder the whole tree or just add to a leaf, doing it the easy way for now
+    public void Add(TKey key, TValue value)
     {
-        if (current.Left != null)
+        var current = Root;
+        // Still won't let me use the == operand
+        while (true)
         {
-            foreach (var item in TraversePostOrder(current.Left))
-                yield return item;
+            if (current.Left == null || current.Right == null)
+            {
+                IZBinaryTree<TKey, TValue>.IZBinaryTreeNode newNode = ZBinaryTreeNode.Create(key, value);
+                if (key.CompareTo(current.Key) < 0)
+                {
+                    current.Left = newNode;
+                }
+                else
+                {
+                    current.Right = newNode;
+                }
+            }
+
+            if (key.CompareTo(current.Key) < 0)
+            {
+                current = current.Left;
+            }
+            else
+            {
+                current = current.Right;
+            }
         }
-        
-        if (current.Right != null)
-        {
-            foreach (var item in TraversePostOrder(current.Right))
-                yield return item;
-        }
-        
-        yield return current.Value;
-        Console.WriteLine(current.Value);
     }
 
+    // I'm unsure how to handle making a new key, or if I even should
+    public TKey AddWithoutKey(TValue value, out TKey key)
+    {
+        throw new NotImplementedException();
+    }
+
+    public bool ContainsKey(TKey key)
+    {
+        throw new NotImplementedException();
+    }
+
+    public bool TryGetValue(TKey key, out TValue value)
+    {
+        throw new NotImplementedException();
+    }
+
+    public TKey GetFirstKey(TValue value)
+    {
+        throw new NotImplementedException();
+    }
+
+    public IEnumerable<TKey> GetAllKeys(TValue value)
+    {
+        throw new NotImplementedException();
+    }
+
+    public TKey SetRootWithoutKey(TValue item, out TKey key)
+    {
+        throw new NotImplementedException();
+    }
+
+    public void SetRoot(TKey key, TValue item)
+    {
+        throw new NotImplementedException();
+    }
+
+    public TKey InsertWithoutKey(TValue value, out TKey key)
+    {
+        throw new NotImplementedException();
+    }
+
+    public void Insert(TKey key, TValue value)
+    {
+        throw new NotImplementedException();
+    }
+
+    public bool RemoveFirst(TValue item)
+    {
+        throw new NotImplementedException();
+    }
+
+    public bool RemoveAt(TKey key)
+    {
+        throw new NotImplementedException();
+    }
+
+    public void RemoveAll(TValue item)
+    {
+        throw new NotImplementedException();
+    }
+
+    public void RemoveLeft(IZBinaryTree<TKey, TValue>.IZBinaryTreeNode parent)
+    {
+        throw new NotImplementedException();
+    }
+
+    public void RemoveRight(IZBinaryTree<TKey, TValue>.IZBinaryTreeNode parent)
+    {
+        throw new NotImplementedException();
+    }
+
+    public bool Contains(TValue item)
+    {
+        throw new NotImplementedException();
+    }
+
+    public IEnumerable<KeyValuePair<TKey, TValue>> TraverseInOrder()
+    {
+        throw new NotImplementedException();
+    }
+
+    public IEnumerable<KeyValuePair<TKey, TValue>> TraversePreOrder()
+    {
+        throw new NotImplementedException();
+    }
+
+    public IEnumerable<KeyValuePair<TKey, TValue>> TraversePostOrder()
+    {
+        throw new NotImplementedException();
+    }
 
     public void Clear()
     {
-        IZBinaryTree<T>.IZBinaryTreeNode<T> current = Root;
-
-        // Get to the lowest right node and store its parent
-        while (Root.Right != null)
-        {
-            IZBinaryTree<T>.IZBinaryTreeNode<T> currentParent = null;
-            while (current.Right != null)
-            {
-                currentParent = current;
-                current = current.Right;
-            }
-            currentParent.Left = null;
-            Count--;
-            currentParent.Right = null;
-            Count--;
-            
-            while (current.Left != null)
-            {
-                currentParent = current;
-                current = current.Left;
-            }
-            currentParent.Left = null;
-            Count--;
-            currentParent.Right = null;
-            Count--;
-        }
+        throw new NotImplementedException();
     }
-
-    private class ZBinaryTreeNode<T> : IZBinaryTree<T>.IZBinaryTreeNode<T>
+    public class ZBinaryTreeNode/*<TKey, TValue>*/
     {
-        public IZBinaryTree<T>.IZBinaryTreeNode<T>? Left { get; set; }
-        public IZBinaryTree<T>.IZBinaryTreeNode<T>? Right { get; set; }
-        public T Value { get; set; }
+        IZBinaryTree<TKey, TValue>.IZBinaryTreeNode Left { get; set; }
 
-        internal static ZBinaryTreeNode<T> Create(T value)
+        IZBinaryTree<TKey, TValue>.IZBinaryTreeNode Right { get; set; }
+
+        // Value last since it might be different sizes
+        private TKey Key { get; set; }
+        TValue Value { get; set; }
+
+        internal static ZBinaryTree<TKey, TValue>.ZBinaryTreeNode Create(TKey key, TValue value)
         {
-            return new ZBinaryTreeNode<T>() { Value = value, Left = null, Right = null };
-        }
-        
-        // If only one node is passed it would have to be the left node?
-        internal static ZBinaryTreeNode<T> Create(ZBinaryTreeNode<T>? left, T value)
-        {
-            return new ZBinaryTreeNode<T>() { Value = value, Left = left, Right = null };
-        } 
-        
-        internal static ZBinaryTreeNode<T> Create(ZBinaryTreeNode<T>? left, ZBinaryTreeNode<T>? right, T value)
-        {
-            return new ZBinaryTreeNode<T>() { Value = value, Left = left, Right = right };
+            return new ZBinaryTreeNode
+            {
+                Left = null,
+                Right = null,
+                Key = key,
+                Value = value
+            };
         }
     }
 }
