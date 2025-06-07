@@ -46,8 +46,6 @@ public interface IZBinaryTree<TKey, TValue> : IEnumerable<KeyValuePair<TKey, TVa
         IZBinaryTreeNode Left { get; set; }
 
         IZBinaryTreeNode Right { get; set; }
-        
-        
 
         // Value last since it might be different sizes
         TKey Key { get; }

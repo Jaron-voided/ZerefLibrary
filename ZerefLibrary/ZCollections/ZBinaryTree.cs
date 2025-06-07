@@ -5,7 +5,7 @@ namespace ZerefLibrary.ZCollections;
 
 public class ZBinaryTree<TKey, TValue> : IZBinaryTree<TKey, TValue> where TKey : IComparable<TKey>
 {
-    public IZBinaryTree<TKey, TValue>.IZBinaryTreeNode Root { get; }
+    public IZBinaryTree<TKey, TValue>.IZBinaryTreeNode Root { get; set; }
     public int Count { get; }
 
     public IEnumerator<KeyValuePair<TKey, TValue>> GetEnumerator()
@@ -78,7 +78,7 @@ public class ZBinaryTree<TKey, TValue> : IZBinaryTree<TKey, TValue> where TKey :
         {
             if (current.Left == null || current.Right == null)
             {
-                IZBinaryTree<TKey, TValue>.IZBinaryTreeNode newNode = ZBinaryTreeNode.Create(key, value);
+                var newNode = ZBinaryTreeNode.Create(key, value);
                 if (key.CompareTo(current.Key) < 0)
                 {
                     current.Left = newNode;
@@ -108,17 +108,80 @@ public class ZBinaryTree<TKey, TValue> : IZBinaryTree<TKey, TValue> where TKey :
 
     public bool ContainsKey(TKey key)
     {
-        throw new NotImplementedException();
+        var current = Root;
+        while (true)
+        {
+            if (current.Key.Equals(key))
+            {
+                return true;
+            }
+            else if (key.CompareTo(current.Key) < 0)
+            {
+                current = current.Left;
+            }
+            else if (key.CompareTo(current.Key) > 0)
+            {
+                current = current.Right;
+            }
+            // Why is current.Left alright, but current.Right will always be false?
+            else if (current.Left == null && current.Right == null)
+            {
+                return false;
+            }
+        }
     }
 
     public bool TryGetValue(TKey key, out TValue value)
     {
-        throw new NotImplementedException();
+        var current = Root;
+        while (true)
+        {
+            if (current.Key.Equals(key))
+            {
+                value = current.Value;
+                return true;
+            }
+            else if (key.CompareTo(current.Key) < 0)
+            {
+                current = current.Left;
+            }
+            else if (key.CompareTo(current.Key) > 0)
+            {
+                current = current.Right;
+            }
+            // Why is current.Left alright, but current.Right will always be false?
+            else if (current.Left == null && current.Right == null)
+            {
+                return false;
+            }
+        }
     }
 
     public TKey GetFirstKey(TValue value)
     {
-        throw new NotImplementedException();
+        // This will have to be done by traversing, since I can't decide with comparisons < >
+        /*var current = Root;
+        while (true)
+        {
+            if (current.Value.Equals(key))
+            {
+                value = current.Value;
+                return true;
+            }
+            else if (key.CompareTo(current.Key) < 0)
+            {
+                current = current.Left;
+            }
+            else if (key.CompareTo(current.Key) > 0)
+            {
+                current = current.Right;
+            }
+            // Why is current.Left alright, but current.Right will always be false?
+            else if (current.Left == null && current.Right == null)
+            {
+                return false;
+            }
+        }*/
     }
 
     public IEnumerable<TKey> GetAllKeys(TValue value)
@@ -131,9 +194,10 @@ public class ZBinaryTree<TKey, TValue> : IZBinaryTree<TKey, TValue> where TKey :
         throw new NotImplementedException();
     }
 
-    public void SetRoot(TKey key, TValue item)
+    public void SetRoot(TKey key, TValue value)
     {
-        throw new NotImplementedException();
+        var root = ZBinaryTreeNode.Create(key, value);
+        Root = root;
     }
 
     public TKey InsertWithoutKey(TValue value, out TKey key)
@@ -141,9 +205,23 @@ public class ZBinaryTree<TKey, TValue> : IZBinaryTree<TKey, TValue> where TKey :
         throw new NotImplementedException();
     }
 
+    // Do I need this and Add?
     public void Insert(TKey key, TValue value)
-    {
-        throw new NotImplementedException();
+    { 
+        var newNode = ZBinaryTreeNode.Create(key, value);
+        var current = Root;
+        while (true)
+        {
+            if (key.CompareTo(current.Key) < 0)
+            { 
+                current = current.Left;
+            }
+            else if (key.CompareTo(current.Key) > 0)
+            { 
+                current = current.Right;
+            }
+            // Why is current.Left alright, but current.Right will always be false?
+        }
     }
 
     public bool RemoveFirst(TValue item)
@@ -195,15 +273,15 @@ public class ZBinaryTree<TKey, TValue> : IZBinaryTree<TKey, TValue> where TKey :
     {
         throw new NotImplementedException();
     }
-    public class ZBinaryTreeNode/*<TKey, TValue>*/
+    public class ZBinaryTreeNode : IZBinaryTree<TKey, TValue>.IZBinaryTreeNode
     {
-        IZBinaryTree<TKey, TValue>.IZBinaryTreeNode Left { get; set; }
+        public IZBinaryTree<TKey, TValue>.IZBinaryTreeNode Left { get; set; }
 
-        IZBinaryTree<TKey, TValue>.IZBinaryTreeNode Right { get; set; }
+        public IZBinaryTree<TKey, TValue>.IZBinaryTreeNode Right { get; set; }
 
         // Value last since it might be different sizes
-        private TKey Key { get; set; }
-        TValue Value { get; set; }
+        public TKey Key { get; set; }
+        public TValue Value { get; set; }
 
         internal static ZBinaryTree<TKey, TValue>.ZBinaryTreeNode Create(TKey key, TValue value)
         {
