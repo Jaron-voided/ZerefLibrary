@@ -3,9 +3,13 @@ using ZerefLibrary.ZInterfaces;
 
 namespace ZerefLibrary.ZCollections;
 
-public class ZBinaryTree<TKey, TValue> : IZBinaryTree<TKey, TValue> where TKey : IComparable<TKey>
+public class ZBinaryTree<TKey, TValue> : IZKeyValueStore<TKey, TValue> where TKey : IComparable<TKey>
 {
+    private ZBinaryTreeNode _root;
     public IZBinaryTree<TKey, TValue>.IZBinaryTreeNode Root { get; set; }
+
+    ZBinaryTreeNode IZKeyValueStore<TKey, TValue>.Root => _root;
+
     public int Count { get; }
 
     public IEnumerator<KeyValuePair<TKey, TValue>> GetEnumerator()
@@ -82,10 +86,12 @@ public class ZBinaryTree<TKey, TValue> : IZBinaryTree<TKey, TValue> where TKey :
                 if (key.CompareTo(current.Key) < 0)
                 {
                     current.Left = newNode;
+                    return;
                 }
                 else
                 {
                     current.Right = newNode;
+                    return;
                 }
             }
 
@@ -99,13 +105,6 @@ public class ZBinaryTree<TKey, TValue> : IZBinaryTree<TKey, TValue> where TKey :
             }
         }
     }
-
-    // I'm unsure how to handle making a new key, or if I even should
-    public TKey AddWithoutKey(TValue value, out TKey key)
-    {
-        throw new NotImplementedException();
-    }
-
     public bool ContainsKey(TKey key)
     {
         var current = Root;
@@ -152,61 +151,25 @@ public class ZBinaryTree<TKey, TValue> : IZBinaryTree<TKey, TValue> where TKey :
             // Why is current.Left alright, but current.Right will always be false?
             else if (current.Left == null && current.Right == null)
             {
+                value = default(TValue);
                 return false;
             }
         }
     }
 
-    public TKey GetFirstKey(TValue value)
-    {
-        // This will have to be done by traversing, since I can't decide with comparisons < >
-        /*var current = Root;
-        while (true)
-        {
-            if (current.Value.Equals(key))
-            {
-                value = current.Value;
-                return true;
-            }
-            else if (key.CompareTo(current.Key) < 0)
-            {
-                current = current.Left;
-            }
-            else if (key.CompareTo(current.Key) > 0)
-            {
-                current = current.Right;
-            }
-            // Why is current.Left alright, but current.Right will always be false?
-            else if (current.Left == null && current.Right == null)
-            {
-                return false;
-            }
-        }*/
-    }
-
-    public IEnumerable<TKey> GetAllKeys(TValue value)
+    public TKey TryGetKey(TValue value)
     {
         throw new NotImplementedException();
     }
-
-    public TKey SetRootWithoutKey(TValue item, out TKey key)
-    {
-        throw new NotImplementedException();
-    }
-
+    
     public void SetRoot(TKey key, TValue value)
     {
         var root = ZBinaryTreeNode.Create(key, value);
         Root = root;
     }
 
-    public TKey InsertWithoutKey(TValue value, out TKey key)
-    {
-        throw new NotImplementedException();
-    }
-
     // Do I need this and Add?
-    public void Insert(TKey key, TValue value)
+    /*public void Insert(TKey key, TValue value)
     { 
         var newNode = ZBinaryTreeNode.Create(key, value);
         var current = Root;
@@ -222,7 +185,7 @@ public class ZBinaryTree<TKey, TValue> : IZBinaryTree<TKey, TValue> where TKey :
             }
             // Why is current.Left alright, but current.Right will always be false?
         }
-    }
+    }*/
 
     public bool RemoveFirst(TValue item)
     {
@@ -235,6 +198,16 @@ public class ZBinaryTree<TKey, TValue> : IZBinaryTree<TKey, TValue> where TKey :
     }
 
     public void RemoveAll(TValue item)
+    {
+        throw new NotImplementedException();
+    }
+
+    public void RemoveLeft(ZBinaryTreeNode parent)
+    {
+        throw new NotImplementedException();
+    }
+
+    public void RemoveRight(ZBinaryTreeNode parent)
     {
         throw new NotImplementedException();
     }
@@ -273,11 +246,11 @@ public class ZBinaryTree<TKey, TValue> : IZBinaryTree<TKey, TValue> where TKey :
     {
         throw new NotImplementedException();
     }
-    public class ZBinaryTreeNode : IZBinaryTree<TKey, TValue>.IZBinaryTreeNode
+    public class ZBinaryTreeNode
     {
-        public IZBinaryTree<TKey, TValue>.IZBinaryTreeNode Left { get; set; }
+        public ZBinaryTreeNode Left { get; set; }
 
-        public IZBinaryTree<TKey, TValue>.IZBinaryTreeNode Right { get; set; }
+        public ZBinaryTreeNode Right { get; set; }
 
         // Value last since it might be different sizes
         public TKey Key { get; set; }

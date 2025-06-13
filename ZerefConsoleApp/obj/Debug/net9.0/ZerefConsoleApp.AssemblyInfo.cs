@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("ZerefConsoleApp")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+fa98796fab93c7fd8d2478c6ccac8c7720de6d76")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+e1634200f0c86118ee2a5a81c097713be3a44644")]
 [assembly: System.Reflection.AssemblyProductAttribute("ZerefConsoleApp")]
 [assembly: System.Reflection.AssemblyTitleAttribute("ZerefConsoleApp")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
