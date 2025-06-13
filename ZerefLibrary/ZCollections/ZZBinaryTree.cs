@@ -157,19 +157,31 @@ public class ZZBinaryTree<TKey, TValue>
             }
             else if (current.Left == null && current.Right == null)
             {
+                // What needs returned here for out value?
                 value = default(TValue);
                 return false;
             }
         }
     }
 
-    public TValue[] CopyTo(int index)
+    public TValue[] CopyTo()
     {
-        throw new NotImplementedException();
+        TValue[] array = new TValue[Count];
+        IEnumerable<KeyValuePair<TKey, TValue>> values = TraverseInOrder();
+
+        var i = 0;
+        foreach (var pair in values)
+        {
+            array[i] = pair.Value;
+            i++;
+        }
+
+        return array;
     }
 
     public bool Remove(TKey key)
     {
+        // Need to extract a method that traverses through the tree looking for the correct spot, as I'm using it alot
         throw new NotImplementedException();
     }
 

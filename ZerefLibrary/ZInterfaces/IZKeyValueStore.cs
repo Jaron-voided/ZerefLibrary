@@ -18,7 +18,7 @@ public interface IZKeyValueStore<TKey, TValue>
     bool TryGetValue(TKey key, out TValue value);
 
     // Copys values into an array
-    TValue[] CopyTo(int index);
+    TValue[] CopyTo();
     bool Remove(TKey key);
     void Clear();
 }
