@@ -9,8 +9,8 @@ public interface IZKeyValueStore<TKey, TValue>
     // Properties
     TValue this[TKey key] { get; set; }
     int Count { get; }
-    ICollection<TKey> Keys { get; }
-    ICollection<TValue> Values { get; }
+    ICollection<TKey>? Keys { get; }
+    ICollection<TValue>? Values { get; }
 
     // Methods 
     void Add(TKey key, TValue value);
