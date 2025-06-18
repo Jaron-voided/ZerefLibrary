@@ -3,7 +3,7 @@ using ZerefLibrary.ZInterfaces;
 
 namespace ZerefLibrary.ZCollections;
 
-public class ZZBinaryTree<TKey, TValue> 
+public class ZBinaryTree<TKey, TValue> 
     : IZKeyValueStore<TKey, TValue>
     where TKey : IComparable<TKey>, IEquatable<TKey>
 {
@@ -24,14 +24,14 @@ public class ZZBinaryTree<TKey, TValue>
         set => SetThat(key, value);
     }
     
-    public static ZZBinaryTree<TKey, TValue> Create()
+    public static ZBinaryTree<TKey, TValue> Create()
     {
-        return new ZZBinaryTree<TKey, TValue>();
+        return new ZBinaryTree<TKey, TValue>();
     }
     
-    public static ZZBinaryTree<TKey, TValue> Create(TKey key, TValue value)
+    public static ZBinaryTree<TKey, TValue> Create(TKey key, TValue value)
     {
-        var tree = new ZZBinaryTree<TKey, TValue>();
+        var tree = new ZBinaryTree<TKey, TValue>();
         tree.Root = ZBinaryTreeNode.Create(key, value);
         tree.Count = 1;
         return tree;
@@ -150,7 +150,6 @@ public class ZZBinaryTree<TKey, TValue>
     }
 
     // Why did I make this a bool?
-    //public bool Remove(TKey key)
     public bool Remove(TKey key)
     {
         // Need to extract a method that traverses through the tree looking for the correct spot, as I'm using it alot
@@ -166,6 +165,7 @@ public class ZZBinaryTree<TKey, TValue>
                 else
                     currentParent.Left = null;
                 current = null;
+                Count--;
                 return true;
             }
             
@@ -185,7 +185,6 @@ public class ZZBinaryTree<TKey, TValue>
             }
         }
 
-        Count--;
     }
 
     public void Clear()
