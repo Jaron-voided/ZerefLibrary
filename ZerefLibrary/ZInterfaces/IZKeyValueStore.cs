@@ -19,6 +19,6 @@ public interface IZKeyValueStore<TKey, TValue>
 
     // Copys values into an array
     TValue[] CopyTo();
-    bool Remove(TKey key);
+    void Remove(TKey key);
     void Clear();
 }

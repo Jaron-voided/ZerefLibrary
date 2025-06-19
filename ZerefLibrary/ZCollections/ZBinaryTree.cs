@@ -149,153 +149,168 @@ public class ZBinaryTree<TKey, TValue>
         return array;
     }
 
-    // Why did I make this a bool?
-    public bool Remove(TKey key)
+    // Entry point to remove
+    public void Remove(TKey key)
     {
-        // Need to extract a method that traverses through the tree looking for the correct spot, as I'm using it alot
-        var current = Root;
-        ZBinaryTreeNode currentParent = Root;
-        
-        while (true)
-        {
-            if (current.Pair.Key.Equals(key))
-            {
-                if (key.CompareTo(current.Pair.Key) < 0)
-                    currentParent.Right = null;
-                else
-                    currentParent.Left = null;
-                current = null;
-                Count--;
-                return true;
-            }
-            
-            if (key.CompareTo(current.Pair.Key) < 0)
-            {
-                currentParent = current;
-                current = current.Left;
-            }
-            else if (key.CompareTo(current.Pair.Key) > 0)
-            {
-                currentParent = current;
-                current = current.Right;
-            }
-            else if (current.Left == null && current.Right == null)
-            {
-                return false;
-            }
-        }
+        Root = Remove(Root, key);
+        Count--;
+    }
+    
+    private ZBinaryTreeNode? Remove(ZBinaryTreeNode? node, TKey key)
+    {
+        // key not found
+        if (node == null) return null;
 
+        // compares current node key to target key
+        int cmp = key.CompareTo(node.Pair.Key);
+
+        if (cmp < 0)
+        {
+            // recursively moves left until it finds the cmp == 0
+            node.Left = Remove(node.Left, key);
+        }
+        else if (cmp > 0)
+        {
+            // moves right until cmp == 0
+            node.Right = Remove(node.Right, key);
+        }
+        else
+        {
+            // found the node to delete, cmp == 0
+            // Case: 0 or 1 child
+            // returns either child to be put in place of the deleted node
+            if (node.Left == null) return node.Right;
+            if (node.Right == null) return node.Left;
+
+            // Case: 2 children → restructure
+            return Rotate(node);
+        }
+        
+        return node;
+    }
+
+    private ZBinaryTreeNode Rotate(ZBinaryTreeNode node)    {
+        if (node.Left.IsFull())
+            return RotateRight(node);
+        
+        if (node.Right.IsFull())
+            return RotateLeft(node);
+        
+        // If they're both full I'm going to have to rotate lots more stuff I feel...
+        return RotateLeft(node);
+        
+    }
+    
+    private ZBinaryTreeNode RotateLeft(ZBinaryTreeNode node)
+    {
+        // Find the successor — smallest node in the right subtree
+        var successor = GetMinNode(node.Right);
+
+        // Step 2: Copy successor's key/value into the current node (overwrite it)
+        node.Pair = successor.Pair;
+
+        // Step 3: Remove the original successor node from the right subtree
+        node.Right = Remove(node.Right, successor.Pair.Key);
+
+        // Step 4: Return the updated current node
+        return node;
+    }
+    
+    private ZBinaryTreeNode RotateRight(ZBinaryTreeNode node)
+    {
+        // Step 1: Find the in-order predecessor — the largest node in the left subtree
+        var predecessor = GetMaxNode(node.Left);
+
+        // Step 2: Copy predecessor's key/value into the current node (overwrite it)
+        node.Pair = predecessor.Pair;
+
+        // Step 3: Remove the original predecessor node from the left subtree
+        node.Left = Remove(node.Left, predecessor.Pair.Key);
+
+        // Step 4: Return the updated current node
+        return node;
     }
 
     public void Clear()
     {
-        // Would this work?
+        Clear(Root);
         Root = null;
         Count = 0;
-        /*var current = Root;
-
-        // Get to the lowest right node and store its parent
-        while (Root.Right != null)
-        {
-            ZBinaryTreeNode currentParent = null;
-            while (current.Right != null)
-            {
-                currentParent = current;
-                current = current.Right;
-            }
-
-            currentParent.Left = null;
-            currentParent.Right = null;
-
-            while (current.Left != null)
-            {
-                currentParent = current;
-                current = current.Left;
-            }
-
-            currentParent.Left = null;
-            currentParent.Right = null;
-        }
-
-        Root = null;
-        Count = 0;*/
     }
 
-    // Non-Interface methods
+    private void Clear(ZBinaryTreeNode node)
+    {
+        if (node == null) return;
+
+        Clear(node.Left);
+        Clear(node.Right);
+        
+        node.Left = null;
+        node.Right = null;
+        node.Pair = default;
+    }
+
+    private ZBinaryTreeNode GetMinNode(ZBinaryTreeNode node)
+    {
+        while (node.Left != null)
+            node = node.Left;
+        return node;
+    }
     
-        // Take this out completely? Or just make it private (not public)
-        /*private void SetRoot(TKey key, TValue value)
-        {
-            var root = ZBinaryTreeNode.Create(key, value);
-            Root = root;
-        }*/
+    private ZBinaryTreeNode GetMaxNode(ZBinaryTreeNode node)
+    {
+        while (node.Right != null)
+            node = node.Right;
+        return node;
+    }
+
+    // Traversals
+    public IEnumerable<KeyValuePair<TKey, TValue>> TraverseInOrder() => TraverseInOrder(Root);
+
+    public IEnumerable<KeyValuePair<TKey, TValue>> TraverseInOrder(ZBinaryTreeNode current)
+    {
+        if (current == null) yield break;
+        
+        foreach (var pair in TraverseInOrder(current.Left))
+            yield return pair;
+        
+        yield return current.Pair;
+        
+        foreach (var pair in TraverseInOrder(current.Right))
+            yield return pair;
+    }
+
+    public IEnumerable<KeyValuePair<TKey, TValue>> TraversePreOrder() => TraversePreOrder(Root);
+
+    public IEnumerable<KeyValuePair<TKey, TValue>> TraversePreOrder(ZBinaryTreeNode current)
+    {
+        if (current == null) yield break;
+
+        yield return current.Pair;
+        
+        foreach (var pair in TraversePreOrder(current.Left))
+            yield return pair;
+        
+        foreach (var pair in TraversePreOrder(current.Right))
+            yield return pair;
+    }
+
+    public IEnumerable<KeyValuePair<TKey, TValue>> TraversePostOrder() => TraversePostOrder(Root);
     
-        // Traversals
-        private IEnumerable<KeyValuePair<TKey, TValue>> TraverseInOrder() => TraverseInOrder(Root);
-
-        private IEnumerable<KeyValuePair<TKey, TValue>> TraverseInOrder(ZBinaryTreeNode current)
-        {
-            if (current == null) yield break;
-
-            if (current.Left != null)
-            {
-                foreach (var pair in TraverseInOrder(current.Left))
-                    yield return pair;
-            }
-            
-            yield return current.Pair;
-
-            if (current.Right != null)
-            {
-                foreach (var pair in TraverseInOrder(current.Right))
-                    yield return pair;
-            }
-        }
-
-        private IEnumerable<KeyValuePair<TKey, TValue>> TraversePreOrder() => TraversePreOrder(Root);
-
-        private IEnumerable<KeyValuePair<TKey, TValue>> TraversePreOrder(ZBinaryTreeNode current)
-        {
-            if (current == null) yield break;
-
-            yield return current.Pair;
+    public IEnumerable<KeyValuePair<TKey, TValue>> TraversePostOrder(ZBinaryTreeNode current)
+    {
+        if (current == null) yield break;
         
-            if (current.Left != null)
-            {
-                foreach (var pair in TraversePreOrder(current.Left))
-                    yield return pair;
-            }
+        foreach (var pair in TraversePostOrder(current.Left))
+            yield return pair;
         
-            if (current.Right != null)
-            {
-                foreach (var pair in TraversePreOrder(current.Right))
-                    yield return pair;
-            }
-        }
-
-        private IEnumerable<KeyValuePair<TKey, TValue>> TraversePostOrder() => TraversePostOrder(Root);
-        
-        private IEnumerable<KeyValuePair<TKey, TValue>> TraversePostOrder(ZBinaryTreeNode current)
-        {
-            if (current == null) yield break;
-
-            if (current.Left != null)
-            {
-                foreach (var pair in TraversePostOrder(current.Left))
-                    yield return pair;
-            }
-        
-            if (current.Right != null)
-            {
-                foreach (var pair in TraversePostOrder(current.Right))
-                    yield return pair;
-            }
-        
-            yield return current.Pair;
-        }
+        foreach (var pair in TraversePostOrder(current.Right))
+            yield return pair;
     
-    // Node
-    internal class ZBinaryTreeNode
+        yield return current.Pair;
+    }
+    
+    public class ZBinaryTreeNode
     {
         internal ZBinaryTreeNode? Left { get; set; }
         internal ZBinaryTreeNode? Right { get; set; }
@@ -309,6 +324,21 @@ public class ZBinaryTree<TKey, TValue>
                 Right = null,
                 Pair = new KeyValuePair<TKey, TValue>(key, value)
             };
+        }
+
+        internal static void DeleteNode(ZBinaryTreeNode? node)
+        {
+            // Don't think I need this, maybe
+        }
+
+        internal bool IsNotFull()
+        {
+            return (Left != null || Right != null);
+        }
+        
+        internal bool IsFull()
+        {
+            return Left != null && Right != null;
         }
     }
 }
