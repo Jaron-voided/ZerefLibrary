@@ -1,37 +1,36 @@
-﻿using System.Collections;
+﻿using System;
 using ZerefLibrary.ZCollections;
 
-/*
 internal class Program
 {
     static void Main()
-    { 
-        var tree = new ZBinaryTree<int>();
+    {
+        var tree = ZBinaryTree<int, string>.Create();
 
-        tree.SetRoot(10);
+        // Adding nodes (key, value)
+        tree.Add(10, "root");
+        tree.Add(5, "left");
+        tree.Add(15, "right");
+        tree.Add(3, "left.left");
+        tree.Add(7, "left.right");
+        tree.Add(20, "right.right");
 
-        var root = tree.Root;
+        Console.WriteLine("In-Order Traversal:");
+        foreach (var pair in tree.TraverseInOrder())
+        {
+            Console.WriteLine($"{pair.Key}: {pair.Value}");
+        }
 
-        tree.InsertLeft(root, 5);
-        tree.InsertRight(root, 15);
+        Console.WriteLine("\nPre-Order Traversal:");
+        foreach (var pair in tree.TraversePreOrder())
+        {
+            Console.WriteLine($"{pair.Key}: {pair.Value}");
+        }
 
-        var node5 = root.Left;
-        var node15 = root.Right;
-
-        tree.InsertLeft(node5, 3);
-        tree.InsertRight(node5, 7);
-
-        tree.InsertRight(node15, 20);
-
-         foreach (var item in tree.TraverseInOrder())
-             Console.WriteLine(item);
-         
-         foreach (var item in tree.TraversePreOrder())
-             Console.WriteLine(item);
-         
-         foreach (var item in tree.TraversePostOrder())
-             Console.WriteLine(item);
+        Console.WriteLine("\nPost-Order Traversal:");
+        foreach (var pair in tree.TraversePostOrder())
+        {
+            Console.WriteLine($"{pair.Key}: {pair.Value}");
+        }
     }
 }
-*/
-
