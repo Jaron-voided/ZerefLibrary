@@ -177,43 +177,96 @@ public class ZBinaryTree<TKey, TValue>
         else
         {
             // found the node to delete, cmp == 0
-            // Case: 0 or 1 child
-            // returns either child to be put in place of the deleted node
+            
+            // No left child
             if (node.Left == null) return node.Right;
+            
+            // No right child
             if (node.Right == null) return node.Left;
-
-            // Case: 2 children → restructure
-            return Rotate(node);
+            
+            // 2 Children
+            var successorParent = node;
+            var successor = node.Right;
+            
+            // Find the inorder successor (leftmost node in right subtree)
+            while (successor.Left != null)
+            {
+                successorParent = successor;
+                successor = successor.Left;
+            }
+            
+            // If the successor isn't the direct child of the node being deleted
+            if (successorParent != node)
+            {
+                // Remove successor from its original spot
+                successorParent.Left = successor.Right;
+                
+                // Link successors right to node's right
+                successor.Right = node.Right;
+            }
+            
+            // Link successors left to nodes left (always safe)
+            successor.Left = node.Left;
+            
+            // Return successor as the new subtree root
+            return successor;
         }
         
-        return node;
+        return node;                                                     // Return updated node back up the recursion chain
     }
 
-    private ZBinaryTreeNode Rotate(ZBinaryTreeNode node)    {
-        if (node.Left.IsFull())
+    private int GetDepth(ZBinaryTreeNode? node)
+    {
+        if (node == null) return 0;
+        
+        int leftDepth = GetDepth(node.Left);
+        int rightDepth = GetDepth(node.Right);
+        
+        return 1 + Math.Max(leftDepth, rightDepth);
+    }
+
+    private ZBinaryTreeNode Rotate(ZBinaryTreeNode node)    
+    {
+        if (node.Left != null && node.Right != null)
+        {
+            // Choose based on depth
+            int leftDepth = GetDepth(node.Left);
+            int rightDepth = GetDepth(node.Right);
+
+            if (leftDepth > rightDepth)
+                return RotateRight(node);
+            else
+                return RotateLeft(node);
+            
+        }
+        // if node.Right is null...
+        else if (node.Left != null)
             return RotateRight(node);
         
-        if (node.Right.IsFull())
+        else if  (node.Right != null)
             return RotateLeft(node);
-        
-        // If they're both full I'm going to have to rotate lots more stuff I feel...
-        return RotateLeft(node);
-        
+
+        // If the node has no children
+        return null!;
     }
     
     private ZBinaryTreeNode RotateLeft(ZBinaryTreeNode node)
     {
-        // Find the successor — smallest node in the right subtree
-        var successor = GetMinNode(node.Right);
+        // Get the in-order predecessor and its parent
+        ZBinaryTreeNode? predecessorParent;
+        var predecessor = GetMaxAndParentNode(node.Left!, out predecessorParent);
 
-        // Step 2: Copy successor's key/value into the current node (overwrite it)
-        node.Pair = successor.Pair;
+        // Rewire the parent's right pointer if predecessor is not the immediate left child
+        if (predecessorParent != null)
+        {
+            predecessorParent.Right = predecessor.Left;
+            predecessor.Left = node.Left;
+        }
 
-        // Step 3: Remove the original successor node from the right subtree
-        node.Right = Remove(node.Right, successor.Pair.Key);
+        // Always attach the right child
+        predecessor.Right = node.Right;
 
-        // Step 4: Return the updated current node
-        return node;
+        return predecessor;
     }
     
     private ZBinaryTreeNode RotateRight(ZBinaryTreeNode node)
@@ -250,17 +303,25 @@ public class ZBinaryTree<TKey, TValue>
         node.Pair = default;
     }
 
-    private ZBinaryTreeNode GetMinNode(ZBinaryTreeNode node)
+    private ZBinaryTreeNode GetMinAndParentNode(ZBinaryTreeNode node, out ZBinaryTreeNode? parent)
     {
+        parent = null;
         while (node.Left != null)
+        {
+            parent = node;
             node = node.Left;
+        }
         return node;
     }
     
-    private ZBinaryTreeNode GetMaxNode(ZBinaryTreeNode node)
+    private ZBinaryTreeNode GetMaxAndParentNode(ZBinaryTreeNode node, out ZBinaryTreeNode? parent)
     {
+        parent = null;
         while (node.Right != null)
+        {
+            parent = node;
             node = node.Right;
+        }
         return node;
     }
 
@@ -324,11 +385,6 @@ public class ZBinaryTree<TKey, TValue>
                 Right = null,
                 Pair = new KeyValuePair<TKey, TValue>(key, value)
             };
-        }
-
-        internal static void DeleteNode(ZBinaryTreeNode? node)
-        {
-            // Don't think I need this, maybe
         }
 
         internal bool IsNotFull()
