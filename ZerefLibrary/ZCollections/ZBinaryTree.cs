@@ -252,6 +252,25 @@ public class ZBinaryTree<TKey, TValue>
     
     private ZBinaryTreeNode RotateLeft(ZBinaryTreeNode node)
     {
+        // Get the in-order successor and its parent
+        ZBinaryTreeNode? successorParent;
+        var successor = GetMinAndParentNode(node.Right!, out successorParent);
+
+        // Rewire the parent's left pointer if successor is not the immediate right child
+        if (successorParent != null)
+        {
+            successorParent.Left = successor.Right;
+            successor.Right = node.Right;
+        }
+
+        // Always attach the left child
+        successor.Left = node.Left;
+
+        return successor;
+    }
+    
+    private ZBinaryTreeNode RotateRight(ZBinaryTreeNode node)
+    {
         // Get the in-order predecessor and its parent
         ZBinaryTreeNode? predecessorParent;
         var predecessor = GetMaxAndParentNode(node.Left!, out predecessorParent);
@@ -267,21 +286,6 @@ public class ZBinaryTree<TKey, TValue>
         predecessor.Right = node.Right;
 
         return predecessor;
-    }
-    
-    private ZBinaryTreeNode RotateRight(ZBinaryTreeNode node)
-    {
-        // Step 1: Find the in-order predecessor — the largest node in the left subtree
-        var predecessor = GetMaxNode(node.Left);
-
-        // Step 2: Copy predecessor's key/value into the current node (overwrite it)
-        node.Pair = predecessor.Pair;
-
-        // Step 3: Remove the original predecessor node from the left subtree
-        node.Left = Remove(node.Left, predecessor.Pair.Key);
-
-        // Step 4: Return the updated current node
-        return node;
     }
 
     public void Clear()
