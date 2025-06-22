@@ -41,10 +41,11 @@ public static class ZCacheTests
             arraySize *= 2;
         }
 
-        /*foreach (var (size, time) in results)
+        foreach (var (size, time) in results)
         {
-            Console.WriteLine($"Size = {size}: Time = {time}");
-        }*/
+            Console.WriteLine($"Size = {size}: Time = {time}: TimePerElement: {time/size}");
+        }
+  
         var plot = new ScottPlot.Plot();
         
         double[] sizes = results.Select(r => (double)r.size).ToArray();
