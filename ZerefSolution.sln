@@ -9,6 +9,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ZerefConsoleApp", "ZerefCon
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ZerefTests", "ZerefTests\ZerefTests.csproj", "{69DE04DE-4E0E-4D8E-B560-6E50453FC2E7}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ZerefPerformance", "ZerefPerformance\ZerefPerformance.csproj", "{01C99565-FA78-44F1-A101-D77ED192B70A}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -55,6 +57,18 @@ Global
 		{69DE04DE-4E0E-4D8E-B560-6E50453FC2E7}.Release|x64.Build.0 = Release|Any CPU
 		{69DE04DE-4E0E-4D8E-B560-6E50453FC2E7}.Release|x86.ActiveCfg = Release|Any CPU
 		{69DE04DE-4E0E-4D8E-B560-6E50453FC2E7}.Release|x86.Build.0 = Release|Any CPU
+		{01C99565-FA78-44F1-A101-D77ED192B70A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{01C99565-FA78-44F1-A101-D77ED192B70A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{01C99565-FA78-44F1-A101-D77ED192B70A}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{01C99565-FA78-44F1-A101-D77ED192B70A}.Debug|x64.Build.0 = Debug|Any CPU
+		{01C99565-FA78-44F1-A101-D77ED192B70A}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{01C99565-FA78-44F1-A101-D77ED192B70A}.Debug|x86.Build.0 = Debug|Any CPU
+		{01C99565-FA78-44F1-A101-D77ED192B70A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{01C99565-FA78-44F1-A101-D77ED192B70A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{01C99565-FA78-44F1-A101-D77ED192B70A}.Release|x64.ActiveCfg = Release|Any CPU
+		{01C99565-FA78-44F1-A101-D77ED192B70A}.Release|x64.Build.0 = Release|Any CPU
+		{01C99565-FA78-44F1-A101-D77ED192B70A}.Release|x86.ActiveCfg = Release|Any CPU
+		{01C99565-FA78-44F1-A101-D77ED192B70A}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

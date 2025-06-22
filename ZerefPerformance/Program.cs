@@ -1,0 +1,3 @@
+﻿using ZerefPerformance;
+
+ZCacheTests.ZCacheLoop();
