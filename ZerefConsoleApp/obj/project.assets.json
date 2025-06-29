@@ -1,10 +1,10 @@
 {
   "version": 3,
   "targets": {
-    "net9.0": {
+    "net8.0": {
       "ZerefLibrary/1.0.0": {
         "type": "project",
-        "framework": ".NETCoreApp,Version=v9.0",
+        "framework": ".NETCoreApp,Version=v8.0",
         "compile": {
           "bin/placeholder/ZerefLibrary.dll": {}
         },
@@ -22,37 +22,37 @@
     }
   },
   "projectFileDependencyGroups": {
-    "net9.0": [
+    "net8.0": [
       "ZerefLibrary >= 1.0.0"
     ]
   },
   "packageFolders": {
-    "/home/zeref-dragneel/.nuget/packages/": {}
+    "/home/izaya/.nuget/packages/": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "/home/zeref-dragneel/Desktop/ZerefLib/ZerefConsoleApp/ZerefConsoleApp.csproj",
+      "projectUniqueName": "/home/izaya/RiderProjects/ZerefLibrary/ZerefConsoleApp/ZerefConsoleApp.csproj",
       "projectName": "ZerefConsoleApp",
-      "projectPath": "/home/zeref-dragneel/Desktop/ZerefLib/ZerefConsoleApp/ZerefConsoleApp.csproj",
-      "packagesPath": "/home/zeref-dragneel/.nuget/packages/",
-      "outputPath": "/home/zeref-dragneel/Desktop/ZerefLib/ZerefConsoleApp/obj/",
+      "projectPath": "/home/izaya/RiderProjects/ZerefLibrary/ZerefConsoleApp/ZerefConsoleApp.csproj",
+      "packagesPath": "/home/izaya/.nuget/packages/",
+      "outputPath": "/home/izaya/RiderProjects/ZerefLibrary/ZerefConsoleApp/obj/",
       "projectStyle": "PackageReference",
       "configFilePaths": [
-        "/home/zeref-dragneel/.nuget/NuGet/NuGet.Config"
+        "/home/izaya/.nuget/NuGet/NuGet.Config"
       ],
       "originalTargetFrameworks": [
-        "net9.0"
+        "net8.0"
       ],
       "sources": {
         "https://api.nuget.org/v3/index.json": {}
       },
       "frameworks": {
-        "net9.0": {
-          "targetAlias": "net9.0",
+        "net8.0": {
+          "targetAlias": "net8.0",
           "projectReferences": {
-            "/home/zeref-dragneel/Desktop/ZerefLib/ZerefLibrary/ZerefLibrary.csproj": {
-              "projectPath": "/home/zeref-dragneel/Desktop/ZerefLib/ZerefLibrary/ZerefLibrary.csproj"
+            "/home/izaya/RiderProjects/ZerefLibrary/ZerefLibrary/ZerefLibrary.csproj": {
+              "projectPath": "/home/izaya/RiderProjects/ZerefLibrary/ZerefLibrary/ZerefLibrary.csproj"
             }
           }
         }
@@ -67,11 +67,11 @@
         "auditLevel": "low",
         "auditMode": "direct"
       },
-      "SdkAnalysisLevel": "9.0.200"
+      "SdkAnalysisLevel": "9.0.300"
     },
     "frameworks": {
-      "net9.0": {
-        "targetAlias": "net9.0",
+      "net8.0": {
+        "targetAlias": "net8.0",
         "imports": [
           "net461",
           "net462",
@@ -83,12 +83,26 @@
         ],
         "assetTargetFallback": true,
         "warn": true,
+        "downloadDependencies": [
+          {
+            "name": "Microsoft.AspNetCore.App.Ref",
+            "version": "[8.0.17, 8.0.17]"
+          },
+          {
+            "name": "Microsoft.NETCore.App.Host.linux-x64",
+            "version": "[8.0.17, 8.0.17]"
+          },
+          {
+            "name": "Microsoft.NETCore.App.Ref",
+            "version": "[8.0.17, 8.0.17]"
+          }
+        ],
         "frameworkReferences": {
           "Microsoft.NETCore.App": {
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "/home/zeref-dragneel/.dotnet/sdk/9.0.200/PortableRuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "/home/izaya/.dotnet/sdk/9.0.301/PortableRuntimeIdentifierGraph.json"
       }
     }
   }

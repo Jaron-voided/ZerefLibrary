@@ -1,8 +1,12 @@
 {
   "version": 2,
-  "dgSpecHash": "e2EY9MNSFrs=",
+  "dgSpecHash": "bUnYecR4IDI=",
   "success": true,
-  "projectFilePath": "/home/zeref-dragneel/Desktop/ZerefLib/ZerefConsoleApp/ZerefConsoleApp.csproj",
-  "expectedPackageFiles": [],
+  "projectFilePath": "/home/izaya/RiderProjects/ZerefLibrary/ZerefConsoleApp/ZerefConsoleApp.csproj",
+  "expectedPackageFiles": [
+    "/home/izaya/.nuget/packages/microsoft.netcore.app.ref/8.0.17/microsoft.netcore.app.ref.8.0.17.nupkg.sha512",
+    "/home/izaya/.nuget/packages/microsoft.aspnetcore.app.ref/8.0.17/microsoft.aspnetcore.app.ref.8.0.17.nupkg.sha512",
+    "/home/izaya/.nuget/packages/microsoft.netcore.app.host.linux-x64/8.0.17/microsoft.netcore.app.host.linux-x64.8.0.17.nupkg.sha512"
+  ],
   "logs": []
 }
